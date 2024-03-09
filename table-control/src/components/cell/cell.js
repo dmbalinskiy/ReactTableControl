@@ -1,9 +1,10 @@
 import './cell.css' 
 import Button from '../button/button.js';
 
-function Cell({cellData, addRow, deleteRow}) {
+function Cell({cellData, cellClick}) {
     return(
-        <td className="contentCell" contentEditable={true} onInput={onTextInput}> 
+        //contentEditable={true}
+        <td className="contentCell"  onClick={cellClick(cellData)}> 
             <div onDivClick={() => onDivClick(cellData)} >
                 {cellData.text}
                 {/* <Button handler={() => addRow()}

@@ -1,10 +1,12 @@
 import './headerCell.css' 
 import Button from '../button/button.js';
 
-function HeaderCell({cellData, addColumn, deleteColumn}) {
+function HeaderCell({cellData, cellTextInput}) {
     return(
     <th className="headerCell"> 
-        <div contentEditable={true} >
+        <div contentEditable={true}  
+             onInput={e => cellTextInput(cellData, e.currentTarget.textContent)}
+             >
                 {cellData.text}
                 {/* <Button handler={() => addColumn(cellData)}
                         type='add' 

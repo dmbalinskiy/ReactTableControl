@@ -1,7 +1,7 @@
 import Row from '../row/row.js'
 import './table.css'
 
-function Table({rows, addRow, deleteRow, addColumn, deleteColumn}) {
+function Table({rows, addRow, deleteRow, addColumn, deleteColumn, cellTextInput, cellClick}) {
     return (
         <div>
             <table>
@@ -13,7 +13,9 @@ function Table({rows, addRow, deleteRow, addColumn, deleteColumn}) {
                                 addRow={addRow} 
                                 deleteRow={deleteRow} 
                                 addColumn={addColumn}
-                                deleteColumn={deleteColumn}/>
+                                deleteColumn={deleteColumn}
+                                cellTextInput={cellTextInput}
+                                cellClick={cellClick}/>
                         )
                         })
                     }

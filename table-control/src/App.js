@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import logo from './logo.svg';
 import './App.css';
 
@@ -11,6 +11,18 @@ const maxRowLength = 2048;
 
 function App() {
     const [tableData, setTableData] = useState(tableDataInitial);
+    let selection = useRef(null);
+
+    useEffect(() => {
+        if(selection.current){
+            document.getSelection().setBaseAndExtent(
+                selection.current.anchor,
+                selection.current.anchorOffset,
+                selection.current.focus,
+                selection.current.focusOffset
+            );
+        }
+      });
 
     function handleAddRow(cellData){
         let newTd = removeVirtualItems(tableData);
@@ -22,16 +34,13 @@ function App() {
         ]
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
-        console.log('>>>>>>>newTd rows...');
-        console.log(newTd.rowIds)
         setTableData(copyTableData(newTd));
+        console.log(newTd);
     };
     function handleDeleteRow(cellData) {
         let newTd = removeVirtualItems(tableData);
         let rowToDelete = tableData.rows.find(r => r.idx === cellData.rowIdx);
         newTd.rowIds.delete(rowToDelete.id);
-        console.log('>>>>>>>newTd rows...');
-        console.log(newTd.rowIds)
         newTd.rows = tableData.rows.filter(r => r.idx !== cellData.rowIdx);
         
         adjustRowIndexes(newTd);
@@ -58,13 +67,32 @@ function App() {
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));;
     }
+    function handleHeaderColumnInput(event, cell, newText){
+
+        let currSelection = document.getSelection();
+        selection.current = 
+        {   
+            anchor: currSelection.anchorNode, 
+            anchorOffset: currSelection.anchorOffset,
+            focus: currSelection.focusNode,
+            focusOffset : currSelection.focusOffset
+        };
+        cell.text = newText;
+        setTableData(copyTableData(tableData))
+        
+    }
+    function handleCellClick(cell){
+        //console.log(cell);
+    }
     
     return (
         <Table rows={tableData.rows} 
                 addRow={handleAddRow} 
                 deleteRow={handleDeleteRow} 
                 addColumn={handleAddColumn}
-                deleteColumn={handleDeleteColumn}/>
+                deleteColumn={handleDeleteColumn}
+                cellTextInput={handleHeaderColumnInput}
+                cellClick={handleCellClick}/>
     )
 }
 
@@ -116,8 +144,6 @@ function adjustCellIndex(cell, cellIdx, rowIdx, rowCnt, colCnt, isVirtual, rowId
     cell.rowCnt = rowCnt;
     cell.colCnt = colCnt;
     cell.isVirtual = isVirtual;
-    //cell.text = `r${cell.rowIdx}c${cell.idx}, id:${cell.id}, virt: ${cell.isVirtual}`;
-    cell.text = ` RowId:${rowId} ColId:${cell.id}`;
 }
 function addVirtualItems(tableData){
     let rows = tableData.rows;
@@ -209,9 +235,6 @@ function ApplyIdToRow(tableData, row){
     }
     row.id = id;
     tableData.rowIds.add(id);
-
-    console.log('>>>>>>ApplyIdToRow')
-    console.log(tableData.rowIds);
 }
 
 let currentId = 2;

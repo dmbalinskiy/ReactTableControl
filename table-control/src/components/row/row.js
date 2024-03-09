@@ -1,7 +1,7 @@
 import Cell from "../cell/cell";
 import HeaderCell from "../headerCell/headerCell";
 import VirtualCell from "../virtualCell/virtualCell";
-function Row({rowData, addRow, deleteRow, addColumn, deleteColumn}) {
+function Row({rowData, addRow, deleteRow, addColumn, deleteColumn, cellTextInput, cellClick}) {
 
     let deleteRowInternal = () => deleteRow(rowData);
     let addRowInternal = () => addRow(rowData);
@@ -17,10 +17,10 @@ function Row({rowData, addRow, deleteRow, addColumn, deleteColumn}) {
                                             deleteRow={deleteRow}/>
                     }
                     else if(val.isHeader){
-                        return <HeaderCell cellData = {val} addColumn={addColumn} deleteColumn={deleteColumn}/> 
+                        return <HeaderCell cellData = {val} cellTextInput={cellTextInput}/> 
                     }
                     else {
-                        return <Cell cellData = {val} addRow={addRowInternal} deleteRow={deleteRowInternal} />
+                        return <Cell cellData = {val} cellClick={cellClick} />
                     }
                 }
             )}
