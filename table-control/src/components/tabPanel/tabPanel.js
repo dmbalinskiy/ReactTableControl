@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-import Table from '../components/table/table'
+import Table from '../table/table'
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;

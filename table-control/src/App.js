@@ -7,14 +7,13 @@ import Table from './components/table/table'
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { StyledEngineProvider } from '@mui/material/styles';
-import TabPanel from './tabPanel/tabPanel';
+import TabPanel from './components/tabPanel/tabPanel';
 
 function App() {
     return (
         <StyledEngineProvider injectFirst>
             <TabPanel />
         </StyledEngineProvider>
-        // <Table />
     )
 }
 
