@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
