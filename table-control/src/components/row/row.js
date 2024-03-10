@@ -3,8 +3,6 @@ import HeaderCell from "../headerCell/headerCell";
 import VirtualCell from "../virtualCell/virtualCell";
 function Row({rowData, addRow, deleteRow, addColumn, deleteColumn, cellTextInput, cellClick}) {
 
-    let deleteRowInternal = () => deleteRow(rowData);
-    let addRowInternal = () => addRow(rowData);
     return (
         <tr>
             {

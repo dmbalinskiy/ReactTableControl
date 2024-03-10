@@ -1,0 +1,45 @@
+.button {
+    background-color: dimgrey;
+    border: none;
+
+    width: 28px;
+    height: 28px;
+    
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover{
+    opacity: 0.8;
+}
+
+.add {
+    background-color: limegreen;
+}
+
+.delete {
+    background-color: coral;
+}
+
+button.disabled {
+    background-color: gray;
+    opacity: 0.6;
+}
+
+
+.icon {
+    color: #202020;
+    font-size: larger;
+}
+
+/* .add {
+    background-color: green;
+    border-color: transparent;
+} */
+
+/* .icon .button {
+    background-color: red;
+    font-size: xx-large;
+} */

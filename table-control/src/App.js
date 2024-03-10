@@ -24,13 +24,13 @@ function App() {
         }
       });
 
-    function handleAddRow(cellData){
+    function handleAddRow(cellData, addBefore){
         let newTd = removeVirtualItems(tableData);
         let row = newTd.rows.find(row => row.idx === cellData.rowIdx);
         newTd.rows = [
-            ...newTd.rows.slice(0, row.idx + 1),
+            ...newTd.rows.slice(0, row.idx + (addBefore ? 0 : 1)),
             getNewRow(newTd, ++currentId, row),
-            ...newTd.rows.slice(row.idx + 1)
+            ...newTd.rows.slice(row.idx + (addBefore ? 0 : 1))
         ]
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
@@ -47,7 +47,7 @@ function App() {
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));;
     }
-    function handleAddColumn(cell){
+    function handleAddColumn(cell, addBefore){
         let newTd = removeVirtualItems(tableData);
         newTd.rows = tableData.rows.map(row => {
             let idx = tableData.rows.findIndex(r => r.id === row.id);
@@ -67,8 +67,7 @@ function App() {
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));;
     }
-    function handleHeaderColumnInput(event, cell, newText){
-
+    function handleHeaderColumnInput(cell, newText){
         let currSelection = document.getSelection();
         selection.current = 
         {   

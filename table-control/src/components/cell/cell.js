@@ -4,8 +4,8 @@ import Button from '../button/button.js';
 function Cell({cellData, cellClick}) {
     return(
         //contentEditable={true}
-        <td className="contentCell"  onClick={cellClick(cellData)}> 
-            <div onDivClick={() => onDivClick(cellData)} >
+        <td className="contentCell"  onClick={() => cellClick(cellData)}> 
+            <div >
                 {cellData.text}
                 {/* <Button handler={() => addRow()}
                         type='add'
@@ -21,13 +21,5 @@ function Cell({cellData, cellClick}) {
         </td>
     )
 }
-
-function onTextInput (args){
-    console.log('text input');
-}
-function onDivClick(cellData){
-    console.log('divClick ', cellData.text);
-}
-
 
 export default Cell;

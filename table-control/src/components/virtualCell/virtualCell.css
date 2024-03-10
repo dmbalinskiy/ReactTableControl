@@ -3,5 +3,19 @@
 } */
 
 .virtualCell {
-    background-color: green;
+    background-color: transparent;
+    opacity: 0;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.virtualCell:hover {
+    opacity: 1;
+}
+
+.virtualCell>div {
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:5px;
 }

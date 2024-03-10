@@ -2,40 +2,50 @@ import './virtualCell.css'
 import Button from '../button/button.js';
 
 function VirtualCell({cellData, addRow, deleteRow, addColumn, deleteColumn}) {
-    let itemContentAdd = null;
+    let itemContentAddLeft = null;
     let itemContentDelete = null;
+    let itemContentAddRight = null;
     
     if(cellData.rowIdx === cellData.rowCnt - 1 && cellData.idx > 0 && cellData.idx < cellData.colCnt - 1){
-        itemContentAdd = 
-            <Button handler={() => addColumn(cellData)}
-                type='add'
-                text='Add Column'/>
+        itemContentAddLeft = 
+            <Button handler={() => addColumn(cellData, true)}
+                type='button add row left'
+                text='Add Column Before'/>
 
         itemContentDelete = 
             <Button handler={() => deleteColumn(cellData)}
-                type='delete'
+                type='button delete row'
                 text='Delete Column'
                 isEnabled={cellData.colCnt > 3} />
+
+        itemContentAddRight = 
+            <Button handler={() => addColumn(cellData, false)}
+                type='button add row right'
+                text='Add Column After'/>
     }
 
     if(cellData.idx === cellData.colCnt - 1 && cellData.rowIdx > 0 && cellData.rowIdx < cellData.rowCnt - 1){
-        itemContentAdd = 
-            <Button handler={() => addRow(cellData)}
-                type='add'
-                text='Add Row'/>
+        itemContentAddLeft = 
+            <Button handler={() => addRow(cellData, true)}
+                type='button add column left'
+                text='Add Row Before'/>
 
         itemContentDelete = 
             <Button handler={() => deleteRow(cellData)}
-                type='delete'
+                type='button delete column'
                 text='Delete Row' isEnabled={cellData.rowCnt > 3}/>
+
+        itemContentAddRight = 
+            <Button handler={() => addRow(cellData, false)}
+                type='button add column right'
+                text='Add Row After'/>
     }
     return(
         <td className="virtualCell"> 
             <div >
-                {cellData.text}
-                {itemContentAdd}
+                {itemContentAddLeft}
                 {itemContentDelete}
-                
+                {itemContentAddRight}
             </div> 
         </td>
     )

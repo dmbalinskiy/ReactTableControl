@@ -1,6 +1,35 @@
+import './button.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+
 function Button({handler, data, type, text, isEnabled= true}) {
+    let icon = faEnvelope;
+    if(type.includes('row') && type.includes('left')){
+        icon = faArrowLeft;
+    }
+    else if(type.includes('row') && type.includes('right')){
+        icon = faArrowRight;
+    }
+    else if(type.includes('column') && type.includes('left')){
+        icon = faArrowUp;
+    }
+    else if(type.includes('column') && type.includes('right')){
+        icon = faArrowDown;
+    }
+    else if(type.includes('delete') ){
+        icon = faTrashCan;
+    }
     return (
-        <button disabled={!isEnabled} className={type} onClick={() => handler(data)}>{text}</button>
+        <button disabled={!isEnabled} className={`${isEnabled ? '' : 'disabled'} ${type}`} onClick={() => handler(data)}>
+            <span>
+                <FontAwesomeIcon className={`icon`} icon={icon} />
+            </span>
+        </button>
     );
 }
 
