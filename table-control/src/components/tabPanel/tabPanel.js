@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import Table from '../table/table'
+import rangeManager from '../../logic/rangeManager';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -41,8 +42,8 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
-  let tab1 = new Table();
-  let tab2 = new Table();
+  let tab1 = new Table(new rangeManager(true));
+  let tab2 = new Table(new rangeManager(true));
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -52,7 +53,7 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        {tab1}
+        {tab1  }
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         {tab2}

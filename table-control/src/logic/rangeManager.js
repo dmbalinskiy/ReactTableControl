@@ -78,3 +78,5 @@ class rangeManager {
 
     #rangeArray;
 }
+
+export default rangeManager;
