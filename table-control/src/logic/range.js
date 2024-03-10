@@ -27,12 +27,27 @@
 //range for horizontal/vertical cell groups
 //can combine
 export class range {
-    constructor (maxCount, isColumnRange, isFixedRange, isEditableCell, cellClickHandler){
+    constructor (
+        startRange, 
+        endRange, 
+        maxCount, 
+        isColumnRange, 
+        isFixedRange, 
+        isEditableCell, 
+        cellModifier,
+        cellClickHandler){
+
+        this.#currentRangeStartIdx = startRange;
+        this.#currentRangeEndIdx = endRange;
         this.maxCount = maxCount < 1 ? 1 : maxCount;
+        if(maxCount < endRange - startRange + 1){
+            this.maxCount =  endRange - startRange + 1;
+        }
         this.isColumnRange = isColumnRange;
         this.isFixedRange = isFixedRange;
         this.isEditableCell = isEditableCell;
         this.cellClickHandler = cellClickHandler;
+        this.cellModifier = cellModifier;
     }
 
     get rangeStartIdx() {

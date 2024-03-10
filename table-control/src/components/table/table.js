@@ -6,9 +6,11 @@ import './table.css'
 const maxColumnLength = 64;
 const maxRowLength = 2048;
 
-function Table() {
+function Table({colMgr, rowMgr}) {
     //let tableDataInitial = addVirtualItems( getInitialData());
-    const [tableData, setTableData] = useState(addVirtualItems( getInitialData()));
+    // const [tableData, setTableData] = useState(addVirtualItems( getInitialData()));
+
+    const [tableData, setTableData] = useState(addVirtualItems( getTableDataByRangeManager(colMgr, rowMgr)));
     let selection = useRef(null);
 
     useEffect(() => {
@@ -33,7 +35,6 @@ function Table() {
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));
-        console.log(newTd);
     };
     function handleDeleteRow(cellData) {
         let newTd = removeVirtualItems(tableData);
@@ -99,11 +100,13 @@ function Table() {
                 return {
                     id : val.id,
                     text: ``,
+                    rangeMgr: val.rangeMgr,
                     isHeader: idx === 0,
                 }
             });
         let row = {
             idx : -1,
+            rangeMgr: previousRow.rangeMgr,
             cells : cells,
             cellIds : new Set(cells.map(c => c.id))
         }
@@ -227,24 +230,76 @@ function Table() {
         tableData.rowIds.add(id);
     }
     
-    function getInitialData() {
-        let tableData = 
-        {
-            rowIds: new Set(),
-            rows:
-            [
-                {id: 0, idx:0, cells: [{ id: 0, idx: 0, rowIdx:0, text: "", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "h2", isHeader: 'true', isVirtual : false}], cellIds : new Set() },
-                {id: 1, idx:1, cells: [{ id: 0, idx: 0, rowIdx:1, text: "val 1", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "val 2", isVirtual : false}], cellIds : new Set() },
-            ]
+    function getTableDataByRangeManager(colMgr, rowMgr){
+        let rowIdx = 0; 
+        let rows = [];
+        for (let rowRng of rowMgr.ranges){
+            for(let rngIdx = rowRng.rangeStartIdx; rngIdx <= rowRng.rangeEndIdx; rngIdx++){
+                console.log(`ROW rng: ${ rowRng.rangeStartIdx}/${rowRng.rangeEndIdx}`);
+                let row = {
+                    id: 0, 
+                    idx: rowIdx,
+                    cellIds : new Set(),
+                    rangeMgr: rowMgr,
+                }
+                row.cells = [];
+                let colIdx = 0;
+                for(let colRng of colMgr.ranges){
+                    for (let colRngIdx = colRng.rangeStartIdx; colRngIdx <= colRng.rangeEndIdx; colRngIdx++){
+                        console.log(`COL rng: ${ colRng.rangeStartIdx}/${colRng.rangeEndIdx}`);
+                        let cellData = {
+                            id: 0, 
+                            idx: colIdx,
+                            isVirtual: false,
+                            rangeMgr: colMgr,
+                        }
+                        cellData = colRng.cellModifier(rowRng.cellModifier(cellData));
+                        row.cells.push(cellData);
+                        ++colIdx;
+                    }
+                }
+                rows.push(row);
+                ++rowIdx;
+            }
         }
+
+        let tableData = {
+            rowIds: new Set(),
+            rows: rows
+        }
+
+        console.log('>>>>>>');
+        console.log(tableData);
+
         for(let row of tableData.rows){
             ApplyIdToRow(tableData, row);
             for(let id of row.cells.map(c => c.id)){
                 row.cellIds.add(id);
             }
         }
+
+        
         return tableData;
     }
+
+    // function getInitialData() {
+    //     let tableData = 
+    //     {
+    //         rowIds: new Set(),
+    //         rows:
+    //         [
+    //             {id: 0, idx:0, cells: [{ id: 0, idx: 0, rowIdx:0, text: "", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "h2", isHeader: 'true', isVirtual : false}], cellIds : new Set() },
+    //             {id: 1, idx:1, cells: [{ id: 0, idx: 0, rowIdx:1, text: "val 1", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "val 2", isVirtual : false}], cellIds : new Set() },
+    //         ]
+    //     }
+    //     for(let row of tableData.rows){
+    //         ApplyIdToRow(tableData, row);
+    //         for(let id of row.cells.map(c => c.id)){
+    //             row.cellIds.add(id);
+    //         }
+    //     }
+    //     return tableData;
+    // }
     
     function copyTableData(tableData){
         return {

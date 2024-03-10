@@ -6,9 +6,32 @@ class rangeManager {
         this.#rangeArray = [];
     }
 
-    createAndAddRange(cellData, maxCount, isFixedRange, isEditableCell, cellClickHandler){
-        let range = new rangeDef(maxCount, this.isColumnRange, isFixedRange, isEditableCell, cellClickHandler);
-        range.addCell(cellData);
+    get ranges() {
+        return this.#rangeArray;
+    }
+
+    get cellModifier() {
+        return this.cellModifier;
+    }
+
+    createAndAddRange(
+        startRange, 
+        endRange, 
+        maxCount, 
+        isFixedRange, 
+        isEditableCell,
+        cellModifier,
+        cellClickHandler
+        ){
+        let range = new rangeDef(
+            startRange, 
+            endRange, 
+            maxCount, 
+            this.isColumnRange, 
+            isFixedRange, 
+            isEditableCell, 
+            cellModifier,
+            cellClickHandler);
         this.#rangeArray.push(range);
     }
 

@@ -7,6 +7,11 @@ import Box from '@mui/material/Box';
 
 import Table from '../table/table'
 import rangeManager from '../../logic/rangeManager';
+import {
+  getHorizontalManagerForTables,
+  getVerticalManagerForTable1, 
+  getVerticalManagerForTable2
+} from '../../logic/rangeManagersFactory'
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -42,8 +47,11 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
-  let tab1 = new Table(new rangeManager(true));
-  let tab2 = new Table(new rangeManager(true));
+  
+
+  let tab1 = new Table( { colMgr: getVerticalManagerForTable1(), rowMgr: getHorizontalManagerForTables()});
+  let tab2 = new Table( { colMgr: getVerticalManagerForTable2(), rowMgr: getHorizontalManagerForTables()});
+  
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
