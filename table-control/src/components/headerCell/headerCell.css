@@ -11,6 +11,7 @@
 .vertical {
     writing-mode: vertical-rl;
     text-orientation: mixed;
+    text-align: right;
     min-width: 25px;
-    
+    min-height: 50px;
 }
