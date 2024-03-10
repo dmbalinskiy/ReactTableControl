@@ -4,5 +4,13 @@
 
 .headerCell {
     background-color: blue;
-    min-width: 100px;
+    min-width: 120px;
+    text-align: left;
+}
+
+.vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    min-width: 25px;
+    
 }

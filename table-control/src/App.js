@@ -51,7 +51,7 @@ function App() {
         let newTd = removeVirtualItems(tableData);
         newTd.rows = tableData.rows.map(row => {
             let idx = tableData.rows.findIndex(r => r.id === row.id);
-            return addColumnToRow(row, cell, idx === 0);
+            return addColumnToRow(row, cell, idx === 0, addBefore);
         });
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
@@ -126,9 +126,13 @@ function getNewRow(tableData, id, previousRow, useId = true){
     
     return row;
 }
-function addColumnToRow(row, cell, isHeaderCell = false){
+function addColumnToRow(row, cell, isHeaderCell = false, addBefore = false){
     let newCell = {text: ``, isHeader : isHeaderCell};
-    row.cells.splice(cell.idx + 1, 0, newCell);
+    row.cells = [
+        ...row.cells.slice(0, cell.idx + (addBefore ? 0 : 1)),
+        newCell,
+        ...row.cells.slice(cell.idx + (addBefore ? 0 : 1))
+    ]
     ApplyIdToCell(row, newCell);
     return row;
 }
@@ -243,8 +247,8 @@ function getInitialData() {
         rowIds: new Set(),
         rows:
         [
-            {id: 0, idx:0, cells: [{ id: 0, idx: 0, text: "h1", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, text: "h2", isHeader: 'true', isVirtual : false}], cellIds : new Set() },
-            {id: 1, idx:1, cells: [{ id: 0, idx: 0, text: "val 1", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, text: "val 2", isVirtual : false}], cellIds : new Set() },
+            {id: 0, idx:0, cells: [{ id: 0, idx: 0, rowIdx:0, text: "", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "h2", isHeader: 'true', isVirtual : false}], cellIds : new Set() },
+            {id: 1, idx:1, cells: [{ id: 0, idx: 0, rowIdx:1, text: "val 1", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "val 2", isVirtual : false}], cellIds : new Set() },
         ]
     }
     for(let row of tableData.rows){

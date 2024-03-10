@@ -2,9 +2,10 @@ import './headerCell.css'
 import Button from '../button/button.js';
 
 function HeaderCell({cellData, cellTextInput}) {
+    console.log(`${cellData.rowIdx}/${cellData.idx}`)
     return(
-    <th className="headerCell"> 
-        <div contentEditable={true}  
+    <th className={`${cellData.idx > 0 ? 'vertical' : ''} headerCell`}> 
+        <div contentEditable={cellData.idx !== 0 || cellData.rowIdx !== 0}  
              onInput={e => cellTextInput(cellData, e.currentTarget.textContent)}
              >
                 {cellData.text}
