@@ -71,6 +71,12 @@ export class range {
         }
     }
 
+    handleClick(cellData){
+        console.log(this);
+        console.log(this.cellClickHandler);
+        this.cellClickHandler(cellData);
+    }
+
     updateIndexesOnOtherRangeAddition(){
         ++this.#currentRangeStartIdx;
         ++this.#currentRangeEndIdx;

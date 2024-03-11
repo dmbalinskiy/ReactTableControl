@@ -19,7 +19,7 @@ function Row({rowData, addRow, deleteRow, addColumn, deleteColumn, cellTextInput
                         return <HeaderCell cellData = {val} cellTextInput={cellTextInput}/> 
                     }
                     else {
-                        return <Cell cellData = {val} cellClick={cellClick} />
+                        return <Cell cellData = {val} cellClick={cellClick} cellTextInput={cellTextInput}/>
                     }
                 }
             )}

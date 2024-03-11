@@ -30,30 +30,32 @@ function getVerticalManagerForTable1(){
         cellData.classes = removeIfContains('vertical', cellData.classes); 
         cellData.isHeader = true; 
         return cellData;}, 
-    (cellData) => { });
+
+    (cellData) => cellData
+    );
 
   //for sensors - expandable
   table1VertMgr.createAndAddRange(1, 12, false, false, 
     (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => { }); 
+    (cellData) => {cellDataClickHandler(cellData)} ); 
 
   //for commands - expandable
   table1VertMgr.createAndAddRange(1, 8, false, false, 
     (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => { }); 
+    (cellData) => {cellDataClickHandler(cellData)} ); 
 
   //for transition sign - fixed
-  table1VertMgr.createAndAddRange(1, 1, true, false, 
+  table1VertMgr.createAndAddRange(1, 1, true, true, 
     (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
     (cellData) => { }); 
   
   //for transition address - fixed
-  table1VertMgr.createAndAddRange(1, 1, true, false, 
+  table1VertMgr.createAndAddRange(1, 1, true, true, 
     (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
     (cellData) => { }); 
 
   //for prohibited combination - fixed
-  table1VertMgr.createAndAddRange(1, 1, true, false, 
+  table1VertMgr.createAndAddRange(1, 1, true, true, 
     (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData },  
     (cellData) => { }); 
 
@@ -136,6 +138,30 @@ function getVerticalManagerForTable2(){
   return table2VertMgr;
 }
 
+function cellDataClickHandler (cellData) {
+  console.log("cellDataClickHandler");
+
+  cellData.classes = removeIfContains('ok', cellData.classes); 
+  cellData.classes = removeIfContains('warning', cellData.classes); 
+  cellData.classes = removeIfContains('error', cellData.classes); 
+
+  if(!cellData.text || cellData.text === ""){
+    cellData.text = '10';
+    cellData.classes = addIfNotContains('ok', cellData.classes);
+  }
+  else if(cellData.text === '10'){
+    cellData.text = '11';
+    cellData.classes = addIfNotContains('warning', cellData.classes);
+  }
+  else if(cellData.text === '11'){
+    cellData.text = '01';
+    cellData.classes = addIfNotContains('error', cellData.classes);
+  }
+  else if(cellData.text === '01'){
+    cellData.text = '';
+  }
+  console.log(cellData);
+}
 
 export {
     replace,

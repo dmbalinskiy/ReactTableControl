@@ -81,7 +81,9 @@ function Table({colMgr, rowMgr}) {
         
     }
     function handleCellClick(cell){
-        //console.log(cell);
+        console.log(cell);
+        cell.rangeMgr.handleClick(cell);
+        setTableData(copyTableData(tableData))
     }
 
     function adjustRowIndexes(tableData){
@@ -92,9 +94,7 @@ function Table({colMgr, rowMgr}) {
                 let cell = row.cells[j];
                 adjustCellIndex(cell, j, i, tableData.rows.length, row.cells.length, false, row.id);
                 cell = row.rangeMgr.getCellModifier(row.idx)(cell);
-                cell = row.rangeMgr.applyBorderModifier(cell);
                 cell = cell.rangeMgr.getCellModifier(cell.idx)(cell);
-                cell = cell.rangeMgr.applyBorderModifier(cell);
             }
         }
         return tableData;

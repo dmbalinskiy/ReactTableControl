@@ -10,12 +10,12 @@
 
 .narrow {
     min-width: 25px;
-    max-width: 25px;
+    max-width: 35px;
 }
 
 th.narrow {
     min-width: 25px;
-    max-width: 25px;
+    max-width: 35px;
 }
 
 .vertical {

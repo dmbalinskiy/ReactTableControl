@@ -3,5 +3,18 @@
 } */
 
 .contentCell {
-    background-color: lightcoral;
+    background-color: transparent;
+    user-select: none
+}
+
+.ok {
+    background-color: lightgreen;
+}
+
+.warning {
+    background-color: yellow;
+}
+
+.error {
+    background-color: orange;
 }

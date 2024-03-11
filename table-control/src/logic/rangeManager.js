@@ -34,7 +34,6 @@ class rangeManager {
     applyBorderModifier(cellData){
         
         const range = this.#getRangeByCellData(cellData);
-        console.log(cellData.classes)
 
         if(this.isColumnRange){
             cellData.classes = removeIfContains("range-left", cellData.classes);
@@ -65,7 +64,12 @@ class rangeManager {
 
     getCellModifier(idx){
         const range = this.#getRangeByIdx(idx);
-        return range.cellModifier;
+        return (cellData) => {
+            cellData.editable = range.isEditableCell;
+            cellData = range.cellModifier(cellData);
+            cellData = this.applyBorderModifier(cellData);
+            return cellData;
+        }
     }
 
     isCellStartRangeStart(cellData){
@@ -79,8 +83,6 @@ class rangeManager {
     }
 
     canAddCell(cellData){
-        //console.log('can add cell data');
-        //console.log(cellData);
         const range = this.#getRangeByCellData(cellData);
         return range.canAddCell(cellData);
     }
@@ -104,6 +106,11 @@ class rangeManager {
             range.deleteCell(cellData);
             this.#updateRangeIndexesOnOtherRanges(range, false);
         }
+    }
+
+    handleClick(cellData){
+        const range = this.#getRangeByCellData(cellData);
+        range.handleClick(cellData);
     }
 
     #getRangeByIdx(idx){
