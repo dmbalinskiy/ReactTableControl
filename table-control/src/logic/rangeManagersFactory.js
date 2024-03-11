@@ -34,6 +34,11 @@ function getVerticalManagerForTable1(){
     (cellData) => cellData, 
     (cellData) => { }); 
 
+  //for virtual items - fixed
+  table1VertMgr.createAndAddRange(7, 7, 1, true, false, 
+    (cellData) => { cellData.isVirtual = true; return cellData;}, 
+    (cellData) => { }); 
+
   return table1VertMgr;
 }
 
@@ -54,6 +59,11 @@ function getHorizontalManagerForTables(){
     horManager.createAndAddRange(2, 2, 128, false, false, 
         (cellData) => { return cellData;}, 
         (cellData) => { });
+    
+    //for virtual items - fixed
+    horManager.createAndAddRange(3, 3, 1, true, false, 
+        (cellData) => { cellData.isVirtual = true; return cellData;}, 
+        (cellData) => { }); 
 
     return horManager;
 }
@@ -84,6 +94,11 @@ function getVerticalManagerForTable2(){
   //for commands - expandable
   table2VertMgr.createAndAddRange(5, 5, 8, false, false, 
     (cellData) => cellData, 
+    (cellData) => { }); 
+
+  //for virtual items - fixed
+  table2VertMgr.createAndAddRange(6, 6, 1, true, false, 
+    (cellData) => { cellData.isVirtual = true; return cellData;}, 
     (cellData) => { }); 
 
   return table2VertMgr;

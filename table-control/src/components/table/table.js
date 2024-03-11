@@ -7,10 +7,8 @@ const maxColumnLength = 64;
 const maxRowLength = 2048;
 
 function Table({colMgr, rowMgr}) {
-    //let tableDataInitial = addVirtualItems( getInitialData());
-    // const [tableData, setTableData] = useState(addVirtualItems( getInitialData()));
 
-    const [tableData, setTableData] = useState(addVirtualItems(adjustRowIndexes(getTableDataByRangeManager(colMgr, rowMgr))));
+    const [tableData, setTableData] = useState(adjustRowIndexes(getTableDataByRangeManager(colMgr, rowMgr)));
     let selection = useRef(null);
 
     useEffect(() => {
@@ -25,7 +23,7 @@ function Table({colMgr, rowMgr}) {
       });
 
     function handleAddRow(cellData, addBefore){
-        let newTd = removeVirtualItems(tableData);
+        let newTd = tableData;
         let row = newTd.rows.find(row => row.idx === cellData.rowIdx);
         newTd.rows = [
             ...newTd.rows.slice(0, row.idx + (addBefore ? 0 : 1)),
@@ -34,42 +32,38 @@ function Table({colMgr, rowMgr}) {
         ]
         row.rangeMgr.addCell(cellData);
         newTd = adjustRowIndexes(newTd);
-        newTd = addVirtualItems(newTd);
         newTd = copyTableData(newTd)
         setTableData(newTd);;
     };
     function handleDeleteRow(cellData) {
-        let newTd = removeVirtualItems(tableData);
+        let newTd = tableData;
         let rowToDelete = tableData.rows.find(r => r.idx === cellData.rowIdx);
         newTd.rowIds.delete(rowToDelete.id);
         newTd.rows = tableData.rows.filter(r => r.idx !== cellData.rowIdx);
         rowToDelete.rangeMgr.deleteCell(cellData);
         newTd = adjustRowIndexes(newTd);
-        newTd = addVirtualItems(newTd);
         newTd = copyTableData(newTd)
         setTableData(newTd);;
     }
     function handleAddColumn(cell, addBefore){
-        let newTd = removeVirtualItems(tableData);
+        let newTd = tableData;
         newTd.rows = tableData.rows.map(row => {
             let idx = tableData.rows.findIndex(r => r.id === row.id);
             return addColumnToRow(row, cell, idx === 0, addBefore);
         });
         cell.rangeMgr.addCell(cell);
         newTd = adjustRowIndexes(newTd);
-        newTd = addVirtualItems(newTd);
         newTd = copyTableData(newTd)
         setTableData(newTd);;
     }
     function handleDeleteColumn(cell){
-        let newTd = removeVirtualItems(tableData);
+        let newTd = tableData;
         newTd.rows = tableData.rows.map(row => {
             let idx = tableData.rows.findIndex(r => r.id === row.id);
             return deleteColumnFromRow(row, cell, idx === 0);
         });
         cell.rangeMgr.deleteCell(cell);
         newTd = adjustRowIndexes(newTd);
-        newTd = addVirtualItems(newTd);
         newTd = copyTableData(newTd)
         setTableData(newTd);;
     }
@@ -149,74 +143,7 @@ function Table({colMgr, rowMgr}) {
         cell.colCnt = colCnt;
         cell.isVirtual = isVirtual;
     }
-    function addVirtualItems(tableData){
-        let rows = tableData.rows;
-        let lastRow = rows[rows.length - 1];
-        const firstCell = lastRow.cells[0];
-        if(firstCell.isVirtual){
-            return;
-        }
-    
-        const firstRow = rows[0];
-        const lastCell = firstRow.cells[firstRow.cells.length - 1];
-        if(lastCell.isVirtual){
-            return;
-        }
-    
-        rows = rows.map(row => {
-            return addColumnToRow(row, row.cells[row.cells.length - 1]);
-        });
-    
-        var row = getNewRow(tableData, rows[rows.length - 1], false);
-        row.idx = rows.length;
-        rows = [...rows, row];
-    
-        //adjust indexes - for last column
-        for(let i = 0; i < rows.length; i++){
-            let row = rows[i];
-            let cell = row.cells[row.cells.length - 1];
-            adjustCellIndex(cell, row.cells.length - 1, i, rows.length, row.cells.length, true, row.id);
-        }
-    
-        //adjust indexes - for last row
-        lastRow = rows[rows.length - 1];
-        for(let i = 0; i < row.cells.length; i++){
-            let cell = row.cells[i];
-            adjustCellIndex(cell, i, row.idx, rows.length, row.cells.length, true, row.id);
-        }
-    
-        tableData.rows = rows;
-        return tableData;
-    }
-    
-    function removeVirtualItems(tableData){
-        tableData = removeVirtualRow(tableData);
-        tableData = removeVirtualColumn(tableData);
-        return tableData;
-    }
-    function removeVirtualRow(tableData){
-        const rows = tableData.rows;
-        const lastRow = rows[rows.length - 1];
-        const firstCell = lastRow.cells[0];
-        if(firstCell.isVirtual){
-            rows.splice(rows.length - 1, 1);
-        }
-        tableData.rows = rows;
-        return tableData;
-    }
-    function removeVirtualColumn(tableData){
-        let rows = tableData.rows;
-        const firstRow = rows[0];
-        const lastCell = firstRow.cells[firstRow.cells.length - 1];
-        if(lastCell.isVirtual){
-            rows = rows.map(row => {
-                return deleteColumnFromRow(row, row.cells[row.cells.length - 1]);
-            });
-        }
-        tableData.rows = rows;
-        return tableData;
-    }
-    
+   
     function ApplyIdToCell(row, cell){
         let id = maxColumnLength * 2;
         for(let i = 0; i < maxColumnLength * 2; i++){
