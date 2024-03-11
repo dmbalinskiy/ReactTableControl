@@ -1,5 +1,6 @@
 import './virtualCell.css' 
 import Button from '../button/button.js';
+import { replace } from '../../logic/rangeManagersFactory.js';
 
 function VirtualCell({cellData, addRow, deleteRow, addColumn, deleteColumn, rowMgr}) {
     let itemContentAddLeft = null;
@@ -46,7 +47,7 @@ function VirtualCell({cellData, addRow, deleteRow, addColumn, deleteColumn, rowM
                 isEnabled={rowMgr.canAddCell(cellData)}/>
     }
     return(
-        <td className="virtualCell"> 
+        <td className={`virtualCell ${replace(cellData.classes, '')}`}> 
             <div >
                 {itemContentAddLeft}
                 {itemContentDelete}

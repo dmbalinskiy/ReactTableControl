@@ -11,8 +11,7 @@ class rangeManager {
     }
 
     createAndAddRange(
-        startRange, 
-        endRange, 
+        count,
         maxCount, 
         isFixedRange, 
         isEditableCell,
@@ -20,8 +19,8 @@ class rangeManager {
         cellClickHandler
         ){
         let range = new rangeDef(
-            startRange, 
-            endRange, 
+            this.#getLastRangePosition() + 1, 
+            this.#getLastRangePosition() + count,
             maxCount, 
             this.isColumnRange, 
             isFixedRange, 
@@ -100,6 +99,12 @@ class rangeManager {
                 currRange.updateIndexesOnOtherRangeDeletion();
             }
         }
+    }
+
+    #getLastRangePosition(){
+        return this.#rangeArray.length > 0 
+            ? this.#rangeArray[this.#rangeArray.length - 1].rangeEndIdx
+            : -1;
     }
 
 

@@ -19,3 +19,7 @@
     justify-content: center;
     gap:5px;
 }
+
+.virtualCell>div.vertical{
+    flex-direction: column;
+}

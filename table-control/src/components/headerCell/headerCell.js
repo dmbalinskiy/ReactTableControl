@@ -1,9 +1,10 @@
 import './headerCell.css' 
 import Button from '../button/button.js';
+import { replace } from '../../logic/rangeManagersFactory.js';
 
 function HeaderCell({cellData, cellTextInput}) {
     return(
-    <th className={`${cellData.classes} headerCell `}> 
+    <th className={`headerCell ${replace(cellData.classes, '')}`}> 
         <div contentEditable={cellData.idx !== 0 || cellData.rowIdx !== 0}  
              onInput={e => cellTextInput(cellData, e.currentTarget.textContent)}
              >

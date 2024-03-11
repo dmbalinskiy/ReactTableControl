@@ -5,7 +5,17 @@
 .headerCell {
     background-color: blue;
     min-width: 120px;
-    text-align: left;
+    text-align: center;
+}
+
+.narrow {
+    min-width: 25px;
+    max-width: 25px;
+}
+
+th.narrow {
+    min-width: 25px;
+    max-width: 25px;
 }
 
 .vertical {
