@@ -6,7 +6,7 @@ function Cell({cellData, cellClick, cellTextInput}) {
     return(
         //contentEditable={true}
         <td className={`contentCell ${replace(cellData.classes, '')}`}  
-            onClick={() => cellClick(cellData)}> 
+            onClick={cellData.editable ? null : () => cellClick(cellData)}> 
             <div contentEditable={cellData.editable}  
                 onInput={e => cellTextInput(cellData, e.currentTarget.textContent)} >
                 {cellData.text}

@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-
 import Row from '../row/row.js'
 import './table.css'
+
+const Replicator = require('replicator')
 
 const maxColumnLength = 64;
 const maxRowLength = 2048;
@@ -33,6 +34,22 @@ function Table({colMgr, rowMgr}) {
         row.rangeMgr.addCell(cellData);
         newTd = adjustRowIndexes(newTd);
         newTd = copyTableData(newTd)
+    
+        console.log(`>>>>serialization trials...`);
+        const replicator = new Replicator();
+        const str = replicator.encode({
+            key1: newTd
+        });
+        console.log(str);
+        const newTd1 = replicator.decode(str);
+        console.log(newTd1);
+
+        // console.log(`>>>>serialization trials...`);
+        // let str = JSON.stringify(newTd);
+        // console.log(JSON.stringify(newTd));
+        // var newTd1 = JSON.parse(str);
+        // console.log(newTd1);
+
         setTableData(newTd);;
     };
     function handleDeleteRow(cellData) {
@@ -68,6 +85,7 @@ function Table({colMgr, rowMgr}) {
         setTableData(newTd);;
     }
     function handleHeaderColumnInput(cell, newText){
+        console.log(`new text: ${newText}`);
         let currSelection = document.getSelection();
         selection.current = 
         {   

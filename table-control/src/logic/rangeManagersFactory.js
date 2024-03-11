@@ -107,32 +107,40 @@ function getVerticalManagerForTable2(){
 
   //range for headers - fixed
   table2VertMgr.createAndAddRange(2, 2, true, true, 
-    (cellData) => { cellData.isHeader = true; return cellData;}, 
-    (cellData) => { });
+    (cellData) => { 
+        cellData.classes = removeIfContains('vertical', cellData.classes); 
+        cellData.isHeader = true; 
+        return cellData;}, 
 
-  //for transition address
-  table2VertMgr.createAndAddRange(1, 1, true, false, 
-    (cellData) => cellData, 
+    (cellData) => cellData
+    );
+
+  //for transition address - fixed
+  table2VertMgr.createAndAddRange(1, 1, true, true, 
+    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
     (cellData) => { }); 
 
   //for logic operation type - fixed
-  table2VertMgr.createAndAddRange(1, 1, true, false, 
-    (cellData) => cellData, 
+  table2VertMgr.createAndAddRange(1, 1, true, true, 
+    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
     (cellData) => { }); 
 
-  //for sensors - expandable
+    //for sensors - expandable
   table2VertMgr.createAndAddRange(1, 12, false, false, 
-    (cellData) => cellData, 
-    (cellData) => { }); 
-
-  //for commands - expandable
+    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
+    (cellData) => {cellDataClickHandler(cellData)} ); 
+  
+    //for commands - expandable
   table2VertMgr.createAndAddRange(1, 8, false, false, 
-    (cellData) => cellData, 
-    (cellData) => { }); 
+    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
+    (cellData) => {cellDataClickHandler(cellData)} ); 
 
   //for virtual items - fixed
   table2VertMgr.createAndAddRange(1, 1, true, false, 
-    (cellData) => { cellData.isVirtual = true; return cellData;}, 
+    (cellData) => { 
+        cellData.classes = removeIfContains('vertical', cellData.classes); 
+        cellData.isVirtual = true; 
+        return cellData;}, 
     (cellData) => { }); 
 
   return table2VertMgr;
