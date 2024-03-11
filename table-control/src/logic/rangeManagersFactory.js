@@ -42,7 +42,13 @@ function getHorizontalManagerForTables(){
 
     //range for headers - fixed
     horManager.createAndAddRange(0, 1, 2, true, true, 
-        (cellData) => { cellData.isHeader = true; return cellData;}, 
+        (cellData) => { 
+            cellData.isHeader = true;  
+            if(cellData.rowIdx === 0 && cellData.idx > 1){
+                cellData.classes = `vertical ${cellData.classes ?? ''}`
+            }
+            return cellData;
+        }, 
         (cellData) => { });
 
     horManager.createAndAddRange(2, 2, 128, false, false, 

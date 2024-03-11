@@ -3,7 +3,7 @@ import Button from '../button/button.js';
 
 function HeaderCell({cellData, cellTextInput}) {
     return(
-    <th className={`${cellData.idx > 0 ? 'vertical' : ''} headerCell`}> 
+    <th className={`${cellData.classes} headerCell `}> 
         <div contentEditable={cellData.idx !== 0 || cellData.rowIdx !== 0}  
              onInput={e => cellTextInput(cellData, e.currentTarget.textContent)}
              >

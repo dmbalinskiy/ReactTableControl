@@ -6,7 +6,7 @@ function VirtualCell({cellData, addRow, deleteRow, addColumn, deleteColumn, rowM
     let itemContentDelete = null;
     let itemContentAddRight = null;
 
-    if(cellData.rowIdx === cellData.rowCnt - 1 && cellData.idx > 0 && cellData.idx < cellData.colCnt - 1){
+    if(cellData.rowIdx === cellData.rowCnt - 1 && cellData.idx < cellData.colCnt - 1){
         itemContentAddLeft = 
             <Button handler={() => addColumn(cellData, true)}
                 type='button add row left'
@@ -26,7 +26,7 @@ function VirtualCell({cellData, addRow, deleteRow, addColumn, deleteColumn, rowM
                 isEnabled={cellData.rangeMgr.canAddCell(cellData)}/>
     }
 
-    if(cellData.idx === cellData.colCnt - 1 && cellData.rowIdx > 0 && cellData.rowIdx < cellData.rowCnt - 1){
+    if(cellData.idx === cellData.colCnt - 1 && cellData.rowIdx < cellData.rowCnt - 1){
         itemContentAddLeft = 
             <Button handler={() => addRow(cellData, true)}
                 type='button add column left'

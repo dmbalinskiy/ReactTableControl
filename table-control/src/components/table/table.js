@@ -10,7 +10,7 @@ function Table({colMgr, rowMgr}) {
     //let tableDataInitial = addVirtualItems( getInitialData());
     // const [tableData, setTableData] = useState(addVirtualItems( getInitialData()));
 
-    const [tableData, setTableData] = useState(addVirtualItems( getTableDataByRangeManager(colMgr, rowMgr)));
+    const [tableData, setTableData] = useState(addVirtualItems(adjustRowIndexes(getTableDataByRangeManager(colMgr, rowMgr))));
     let selection = useRef(null);
 
     useEffect(() => {
@@ -33,9 +33,10 @@ function Table({colMgr, rowMgr}) {
             ...newTd.rows.slice(row.idx + (addBefore ? 0 : 1))
         ]
         row.rangeMgr.addCell(cellData);
-        adjustRowIndexes(newTd);
+        newTd = adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
-        setTableData(copyTableData(newTd));
+        newTd = copyTableData(newTd)
+        setTableData(newTd);;
     };
     function handleDeleteRow(cellData) {
         let newTd = removeVirtualItems(tableData);
@@ -43,9 +44,10 @@ function Table({colMgr, rowMgr}) {
         newTd.rowIds.delete(rowToDelete.id);
         newTd.rows = tableData.rows.filter(r => r.idx !== cellData.rowIdx);
         rowToDelete.rangeMgr.deleteCell(cellData);
-        adjustRowIndexes(newTd);
+        newTd = adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
-        setTableData(copyTableData(newTd));;
+        newTd = copyTableData(newTd)
+        setTableData(newTd);;
     }
     function handleAddColumn(cell, addBefore){
         let newTd = removeVirtualItems(tableData);
@@ -54,9 +56,10 @@ function Table({colMgr, rowMgr}) {
             return addColumnToRow(row, cell, idx === 0, addBefore);
         });
         cell.rangeMgr.addCell(cell);
-        adjustRowIndexes(newTd);
+        newTd = adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
-        setTableData(copyTableData(newTd));;
+        newTd = copyTableData(newTd)
+        setTableData(newTd);;
     }
     function handleDeleteColumn(cell){
         let newTd = removeVirtualItems(tableData);
@@ -65,9 +68,10 @@ function Table({colMgr, rowMgr}) {
             return deleteColumnFromRow(row, cell, idx === 0);
         });
         cell.rangeMgr.deleteCell(cell);
-        adjustRowIndexes(newTd);
+        newTd = adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
-        setTableData(copyTableData(newTd));;
+        newTd = copyTableData(newTd)
+        setTableData(newTd);;
     }
     function handleHeaderColumnInput(cell, newText){
         let currSelection = document.getSelection();
@@ -93,8 +97,11 @@ function Table({colMgr, rowMgr}) {
             for(let j = 0; j < row.cells.length; j++){
                 let cell = row.cells[j];
                 adjustCellIndex(cell, j, i, tableData.rows.length, row.cells.length, false, row.id);
+                cell = row.rangeMgr.getCellModifier(row.idx)(cell);
+                cell = cell.rangeMgr.getCellModifier(cell.idx)(cell);
             }
         }
+        return tableData;
     }
     
     function getNewRow(tableData, previousRow, useId = true){
@@ -105,11 +112,6 @@ function Table({colMgr, rowMgr}) {
                     text: ``,
                     rangeMgr: val.rangeMgr,
                     isHeader: idx === 0,
-                }
-                if(useId)
-                {
-                    cell = previousRow.rangeMgr.getCellModifier(previousRow.idx)(cell);
-                    cell = val.rangeMgr.getCellModifier(idx)(cell);
                 }
                 return cell;
             });
@@ -127,8 +129,6 @@ function Table({colMgr, rowMgr}) {
     }
     function addColumnToRow(row, cell, isHeaderCell = false, addBefore = false){
         let newCell = {text: ``, rowIdx: row.idx, isHeader : isHeaderCell, rangeMgr: cell.rangeMgr };
-        newCell = row.rangeMgr.getCellModifier(row.idx)(newCell);
-        newCell = newCell.rangeMgr.getCellModifier(cell.idx)(newCell);
         row.cells = [
             ...row.cells.slice(0, cell.idx + (addBefore ? 0 : 1)),
             newCell,
@@ -142,7 +142,7 @@ function Table({colMgr, rowMgr}) {
         row.cellIds.delete(cell.id);
         return row;
     }
-    function adjustCellIndex(cell, cellIdx, rowIdx, rowCnt, colCnt, isVirtual, rowId){
+    function adjustCellIndex(cell, cellIdx, rowIdx, rowCnt, colCnt, isVirtual){
         cell.idx = cellIdx;
         cell.rowIdx = rowIdx;
         cell.rowCnt = rowCnt;
@@ -287,25 +287,6 @@ function Table({colMgr, rowMgr}) {
         
         return tableData;
     }
-
-    // function getInitialData() {
-    //     let tableData = 
-    //     {
-    //         rowIds: new Set(),
-    //         rows:
-    //         [
-    //             {id: 0, idx:0, cells: [{ id: 0, idx: 0, rowIdx:0, text: "", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "h2", isHeader: 'true', isVirtual : false}], cellIds : new Set() },
-    //             {id: 1, idx:1, cells: [{ id: 0, idx: 0, rowIdx:1, text: "val 1", isHeader: 'true', isVirtual : false}, { id: 1, idx:1, rowIdx:0, text: "val 2", isVirtual : false}], cellIds : new Set() },
-    //         ]
-    //     }
-    //     for(let row of tableData.rows){
-    //         ApplyIdToRow(tableData, row);
-    //         for(let id of row.cells.map(c => c.id)){
-    //             row.cellIds.add(id);
-    //         }
-    //     }
-    //     return tableData;
-    // }
     
     function copyTableData(tableData){
         return {
