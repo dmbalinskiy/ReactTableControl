@@ -72,7 +72,7 @@ export class range {
 
     canAddCell(cellData){
         return !this.isFixedRange 
-            && this.#currentRangeEndIdx - this.#currentRangeStartIdx < this.maxCount
+            && this.#currentRangeEndIdx - this.#currentRangeStartIdx + 1 < this.maxCount
     }
 
     canDeleteCell(cellData){

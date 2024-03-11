@@ -32,6 +32,7 @@ function Table({colMgr, rowMgr}) {
             getNewRow(newTd, row),
             ...newTd.rows.slice(row.idx + (addBefore ? 0 : 1))
         ]
+        row.rangeMgr.addCell(cellData);
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));
@@ -41,7 +42,7 @@ function Table({colMgr, rowMgr}) {
         let rowToDelete = tableData.rows.find(r => r.idx === cellData.rowIdx);
         newTd.rowIds.delete(rowToDelete.id);
         newTd.rows = tableData.rows.filter(r => r.idx !== cellData.rowIdx);
-        
+        rowToDelete.rangeMgr.deleteCell(cellData);
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));;
@@ -52,6 +53,7 @@ function Table({colMgr, rowMgr}) {
             let idx = tableData.rows.findIndex(r => r.id === row.id);
             return addColumnToRow(row, cell, idx === 0, addBefore);
         });
+        cell.rangeMgr.addCell(cell);
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));;
@@ -62,6 +64,7 @@ function Table({colMgr, rowMgr}) {
             let idx = tableData.rows.findIndex(r => r.id === row.id);
             return deleteColumnFromRow(row, cell, idx === 0);
         });
+        cell.rangeMgr.deleteCell(cell);
         adjustRowIndexes(newTd);
         newTd = addVirtualItems(newTd);
         setTableData(copyTableData(newTd));;
@@ -97,12 +100,18 @@ function Table({colMgr, rowMgr}) {
     function getNewRow(tableData, previousRow, useId = true){
         let cells = previousRow.cells.map(
             (val, idx) =>{
-                return {
+                var cell = {
                     id : val.id,
                     text: ``,
                     rangeMgr: val.rangeMgr,
                     isHeader: idx === 0,
                 }
+                if(useId)
+                {
+                    cell = previousRow.rangeMgr.getCellModifier(previousRow.idx)(cell);
+                    cell = val.rangeMgr.getCellModifier(idx)(cell);
+                }
+                return cell;
             });
         let row = {
             idx : -1,
@@ -117,7 +126,9 @@ function Table({colMgr, rowMgr}) {
         return row;
     }
     function addColumnToRow(row, cell, isHeaderCell = false, addBefore = false){
-        let newCell = {text: ``, isHeader : isHeaderCell};
+        let newCell = {text: ``, rowIdx: row.idx, isHeader : isHeaderCell, rangeMgr: cell.rangeMgr };
+        newCell = row.rangeMgr.getCellModifier(row.idx)(newCell);
+        newCell = newCell.rangeMgr.getCellModifier(cell.idx)(newCell);
         row.cells = [
             ...row.cells.slice(0, cell.idx + (addBefore ? 0 : 1)),
             newCell,
@@ -235,7 +246,6 @@ function Table({colMgr, rowMgr}) {
         let rows = [];
         for (let rowRng of rowMgr.ranges){
             for(let rngIdx = rowRng.rangeStartIdx; rngIdx <= rowRng.rangeEndIdx; rngIdx++){
-                console.log(`ROW rng: ${ rowRng.rangeStartIdx}/${rowRng.rangeEndIdx}`);
                 let row = {
                     id: 0, 
                     idx: rowIdx,
@@ -246,7 +256,6 @@ function Table({colMgr, rowMgr}) {
                 let colIdx = 0;
                 for(let colRng of colMgr.ranges){
                     for (let colRngIdx = colRng.rangeStartIdx; colRngIdx <= colRng.rangeEndIdx; colRngIdx++){
-                        console.log(`COL rng: ${ colRng.rangeStartIdx}/${colRng.rangeEndIdx}`);
                         let cellData = {
                             id: 0, 
                             idx: colIdx,
@@ -267,9 +276,6 @@ function Table({colMgr, rowMgr}) {
             rowIds: new Set(),
             rows: rows
         }
-
-        console.log('>>>>>>');
-        console.log(tableData);
 
         for(let row of tableData.rows){
             ApplyIdToRow(tableData, row);

@@ -10,10 +10,6 @@ class rangeManager {
         return this.#rangeArray;
     }
 
-    get cellModifier() {
-        return this.cellModifier;
-    }
-
     createAndAddRange(
         startRange, 
         endRange, 
@@ -35,6 +31,11 @@ class rangeManager {
         this.#rangeArray.push(range);
     }
 
+    getCellModifier(idx){
+        const range = this.#getRangeByIdx(idx);
+        return range.cellModifier;
+    }
+
     isCellStartRangeStart(cellData){
         const range = this.#getRangeByCellData(cellData);
         return range.isCellStartRangeStart(cellData);
@@ -46,6 +47,8 @@ class rangeManager {
     }
 
     canAddCell(cellData){
+        //console.log('can add cell data');
+        //console.log(cellData);
         const range = this.#getRangeByCellData(cellData);
         return range.canAddCell(cellData);
     }
@@ -59,7 +62,7 @@ class rangeManager {
         const range = this.#getRangeByCellData(cellData);
         if(range.canAddCell(cellData)){
             range.addCell(cellData);
-            this.#updateRangeIndexesOnOtherRanges(cellData, true);
+            this.#updateRangeIndexesOnOtherRanges(range, true);
         }
     }
 
@@ -67,15 +70,14 @@ class rangeManager {
         const range = this.#getRangeByCellData(cellData);
         if(range.canDeleteCell(cellData)){
             range.deleteCell(cellData);
-            this.#updateRangeIndexesOnOtherRanges(cellData, false);
+            this.#updateRangeIndexesOnOtherRanges(range, false);
         }
     }
 
-    #getRangeByCellData(cellData){
+    #getRangeByIdx(idx){
         let resultRng;
-        const idxToCompare = this.isColumnRange ? cellData.idx : cellData.rowIdx;
         for(let rng of this.#rangeArray){
-            if(rng.rangeStartIdx <= idxToCompare && rng.rangeEndIdx >= idxToCompare ){
+            if(rng.rangeStartIdx <= idx && rng.rangeEndIdx >= idx ){
                 resultRng = rng;
                 break;
             }
@@ -83,9 +85,12 @@ class rangeManager {
         return resultRng;
     }
 
-    #updateRangeIndexesOnOtherRanges(cellData, isAddition){
-        let rng = this.#getRangeByCellData(cellData);
-        const idx = this.#rangeArray.findIndex(r => r === rng);
+    #getRangeByCellData(cellData){
+        return this.#getRangeByIdx(this.isColumnRange ? cellData.idx : cellData.rowIdx);
+    }
+
+    #updateRangeIndexesOnOtherRanges(range, isAddition){
+        const idx = this.#rangeArray.findIndex(r => r === range);
         for(let i = idx + 1; i < this.#rangeArray.length; i++){
             let currRange = this.#rangeArray[i];
             if(isAddition){
@@ -94,7 +99,6 @@ class rangeManager {
             else {
                 currRange.updateIndexesOnOtherRangeDeletion();
             }
-            
         }
     }
 

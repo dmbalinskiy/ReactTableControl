@@ -12,7 +12,8 @@ function Row({rowData, addRow, deleteRow, addColumn, deleteColumn, cellTextInput
                                             addColumn={addColumn} 
                                             deleteColumn={deleteColumn} 
                                             addRow={addRow} 
-                                            deleteRow={deleteRow}/>
+                                            deleteRow={deleteRow}
+                                            rowMgr={rowData.rangeMgr}/>
                     }
                     else if(val.isHeader){
                         return <HeaderCell cellData = {val} cellTextInput={cellTextInput}/> 

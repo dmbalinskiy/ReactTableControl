@@ -10,12 +10,12 @@ function getVerticalManagerForTable1(){
     (cellData) => { });
 
   //for sensors - expandable
-  table1VertMgr.createAndAddRange(2, 2, 1, false, false, 
+  table1VertMgr.createAndAddRange(2, 2, 12, false, false, 
     (cellData) => cellData, 
     (cellData) => { }); 
 
   //for commands - expandable
-  table1VertMgr.createAndAddRange(3, 3, 1, false, false, 
+  table1VertMgr.createAndAddRange(3, 3, 8, false, false, 
     (cellData) => cellData, 
     (cellData) => { }); 
 
@@ -45,7 +45,7 @@ function getHorizontalManagerForTables(){
         (cellData) => { cellData.isHeader = true; return cellData;}, 
         (cellData) => { });
 
-    horManager.createAndAddRange(2, 2, 1, false, false, 
+    horManager.createAndAddRange(2, 2, 128, false, false, 
         (cellData) => { return cellData;}, 
         (cellData) => { });
 
@@ -71,12 +71,12 @@ function getVerticalManagerForTable2(){
     (cellData) => { }); 
 
   //for sensors - expandable
-  table2VertMgr.createAndAddRange(4, 4, 1, false, false, 
+  table2VertMgr.createAndAddRange(4, 4, 12, false, false, 
     (cellData) => cellData, 
     (cellData) => { }); 
 
   //for commands - expandable
-  table2VertMgr.createAndAddRange(5, 5, 1, false, false, 
+  table2VertMgr.createAndAddRange(5, 5, 8, false, false, 
     (cellData) => cellData, 
     (cellData) => { }); 
 
