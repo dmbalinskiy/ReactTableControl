@@ -1,4 +1,5 @@
 import rangeDef from './range'
+import { addIfNotContains, removeIfContains } from './rangeManagersFactory';
 
 class rangeManager {
     constructor(isColumnRange){
@@ -12,22 +13,54 @@ class rangeManager {
 
     createAndAddRange(
         count,
-        maxCount, 
-        isFixedRange, 
+        maxCount,
+        isFixedRange,
         isEditableCell,
         cellModifier,
         cellClickHandler
         ){
         let range = new rangeDef(
-            this.#getLastRangePosition() + 1, 
+            this.#getLastRangePosition() + 1,
             this.#getLastRangePosition() + count,
-            maxCount, 
-            this.isColumnRange, 
-            isFixedRange, 
-            isEditableCell, 
+            maxCount,
+            this.isColumnRange,
+            isFixedRange,
+            isEditableCell,
             cellModifier,
             cellClickHandler);
         this.#rangeArray.push(range);
+    }
+
+    applyBorderModifier(cellData){
+        
+        const range = this.#getRangeByCellData(cellData);
+        console.log(cellData.classes)
+
+        if(this.isColumnRange){
+            cellData.classes = removeIfContains("range-left", cellData.classes);
+            cellData.classes = removeIfContains("range-right", cellData.classes);
+        }
+        else if(!this.isColumnRange){
+            cellData.classes = removeIfContains("range-top", cellData.classes);
+            cellData.classes = removeIfContains("range-bottom", cellData.classes);
+        }
+        
+        if(cellData.isVirtual){
+            cellData.classes = removeIfContains("range-left", cellData.classes);
+            cellData.classes = removeIfContains("range-right", cellData.classes);
+            cellData.classes = removeIfContains("range-top", cellData.classes);
+            cellData.classes = removeIfContains("range-bottom", cellData.classes);
+            return cellData;
+        }
+
+        if(range.isCellStartRangeStart(cellData)){
+           cellData.classes = addIfNotContains(this.isColumnRange ? "range-left" : "range-top", cellData.classes);
+        }
+        if(range.isCellEndRangeEnd(cellData)){
+            cellData.classes = addIfNotContains(this.isColumnRange ? "range-right" : "range-bottom", cellData.classes);
+        }
+
+        return cellData;
     }
 
     getCellModifier(idx){
@@ -102,7 +135,7 @@ class rangeManager {
     }
 
     #getLastRangePosition(){
-        return this.#rangeArray.length > 0 
+        return this.#rangeArray.length > 0
             ? this.#rangeArray[this.#rangeArray.length - 1].rangeEndIdx
             : -1;
     }

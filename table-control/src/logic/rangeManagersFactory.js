@@ -15,7 +15,7 @@ function removeIfContains(valueToRemove, valueToCheck){
     valueToRemove = replace(valueToRemove, '');
     valueToCheck = replace(valueToCheck, '');
     if(valueToCheck.includes(valueToRemove)){
-        valueToCheck.replace(valueToRemove, '');
+        valueToCheck = valueToCheck.replace(valueToRemove, '');
     }
     return valueToCheck;
 }
