@@ -1,7 +1,15 @@
 import Cell from "../cell/cell";
 import HeaderCell from "../headerCell/headerCell";
 import VirtualCell from "../virtualCell/virtualCell";
-function Row({rowData, addRow, deleteRow, addColumn, deleteColumn, cellTextInput, cellClick}) {
+function Row({rowData, 
+    addRow, 
+    deleteRow, 
+    addColumn, 
+    deleteColumn, 
+    cellTextInput, 
+    cellClick, 
+    exportHandler, 
+    importHandler}) {
 
     return (
         <tr>
@@ -12,7 +20,9 @@ function Row({rowData, addRow, deleteRow, addColumn, deleteColumn, cellTextInput
                                             addColumn={addColumn} 
                                             deleteColumn={deleteColumn} 
                                             addRow={addRow} 
-                                            deleteRow={deleteRow}
+                                            deleteRow={deleteRow} 
+                                            exportHandler={exportHandler}
+                                            importHandler={importHandler}
                                             rowMgr={rowData.rangeMgr}/>
                     }
                     else if(val.isHeader){

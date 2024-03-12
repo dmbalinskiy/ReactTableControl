@@ -64,6 +64,10 @@ function getVerticalManagerForTable1(){
     (cellData) => { 
         cellData.classes = removeIfContains('vertical', cellData.classes); 
         cellData.isVirtual = true; 
+        if(cellData.rowIdx === 0 || cellData.rowIdx === 1){
+              cellData.isExportImportCell = true;
+              cellData.classes = addIfNotContains('exportImport', cellData.classes)
+        }
         return cellData;}, 
     (cellData) => { }); 
 
@@ -177,6 +181,7 @@ export {
     removeIfContains,
     getVerticalManagerForTable1, 
     getVerticalManagerForTable2,
-    getHorizontalManagerForTables
+    getHorizontalManagerForTables,
+    cellDataClickHandler
 
 }

@@ -21,6 +21,10 @@
     gap:5px;
 }
 
+.exportImport>div {
+    align-items: left;
+}
+
 .virtualCell>div.vertical{
     flex-direction: column;
 }

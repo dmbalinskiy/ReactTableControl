@@ -12,9 +12,10 @@ import {
   getVerticalManagerForTable1, 
   getVerticalManagerForTable2
 } from '../../logic/rangeManagersFactory'
-import SerializationBar from '../serializationBar/serializationBar';
 
 function CustomTabPanel(props) {
+
+
   const { children, value, index, ...other } = props;
 
   return (
@@ -42,24 +43,15 @@ CustomTabPanel.propTypes = {
 
 
 export default function BasicTabs() {
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const exportHandler = (table) => {
-
-  }
-
-  const importHandler = (table) => {
-
-  }
-
   let tab1 = new Table( { colMgr: getVerticalManagerForTable1(), rowMgr: getHorizontalManagerForTables()});
-  let bar1 = new SerializationBar({table : tab1});
   let tab2 = new Table( { colMgr: getVerticalManagerForTable2(), rowMgr: getHorizontalManagerForTables()});
-  let bar2 = new SerializationBar({table : tab2});
   
   return (
     <Box sx={{ width: '100%' }}>
@@ -71,14 +63,12 @@ export default function BasicTabs() {
       </Box>
       <CustomTabPanel value={value} index={0}>
         <div>
-          {bar1 }
           {tab1 }
         </div>
         
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <div>
-          {bar2 }
           {tab2 }
         </div>
         

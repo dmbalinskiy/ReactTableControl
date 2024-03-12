@@ -1,3 +1,4 @@
+
 export class range {
     constructor (
         startRange, 
@@ -11,23 +12,55 @@ export class range {
 
         this.#currentRangeStartIdx = startRange;
         this.#currentRangeEndIdx = endRange;
-        this.maxCount = maxCount < 1 ? 1 : maxCount;
+        this.#maxCount = maxCount < 1 ? 1 : maxCount;
         if(maxCount < endRange - startRange + 1){
-            this.maxCount =  endRange - startRange + 1;
+            this.#maxCount =  endRange - startRange + 1;
         }
-        this.isColumnRange = isColumnRange;
-        this.isFixedRange = isFixedRange;
-        this.isEditableCell = isEditableCell;
-        this.cellClickHandler = cellClickHandler;
-        this.cellModifier = cellModifier;
+        this.#isColumnRange = isColumnRange;
+        this.#isFixedRange = isFixedRange;
+        this.#isEditableCell = isEditableCell;
+        this.#cellModifier = cellModifier;
+        this.#cellClickHandler = cellClickHandler;
     }
 
+    #currentRangeStartIdx = -1;
     get rangeStartIdx() {
         return this.#currentRangeStartIdx;
     }
 
+    #currentRangeEndIdx = -1;
     get rangeEndIdx(){
         return this.#currentRangeEndIdx;
+    }
+
+    #maxCount;
+    get maxCount(){
+        return this.#maxCount;
+    }
+
+    #isColumnRange;
+    get isColumnRange() {
+        return this.#isColumnRange;
+    }
+
+    #isFixedRange;
+    get isFixedRange() {
+        return this.#isFixedRange;
+    }
+
+    #isEditableCell;
+    get isEditableCell() {
+        return this.#isEditableCell;
+    }
+
+    #cellClickHandler;
+    get cellClickHandler() {
+        return this.#cellClickHandler
+    }
+
+    #cellModifier;
+    get cellModifier() {
+        return this.#cellModifier;
     }
 
     isCellStartRangeStart(cellData){
@@ -86,9 +119,6 @@ export class range {
         --this.#currentRangeStartIdx;
         --this.#currentRangeEndIdx;
     }
-
-    #currentRangeStartIdx = -1;
-    #currentRangeEndIdx = -1;
 }
 
 export default range;

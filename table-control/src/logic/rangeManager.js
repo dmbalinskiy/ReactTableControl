@@ -2,11 +2,17 @@ import rangeDef from './range'
 import { addIfNotContains, removeIfContains } from './rangeManagersFactory';
 
 class rangeManager {
-    constructor(isColumnRange){
-        this.isColumnRange = isColumnRange;
-        this.#rangeArray = [];
+    constructor(isColumnRange, ranges = []){
+        this.#isColumnRange = isColumnRange;
+        this.#rangeArray = ranges;
     }
 
+    #isColumnRange;
+    get isColumnRange() {
+        return this.#isColumnRange;
+    }
+
+    #rangeArray;
     get ranges() {
         return this.#rangeArray;
     }
@@ -147,8 +153,6 @@ class rangeManager {
             : -1;
     }
 
-
-    #rangeArray;
 }
 
 export default rangeManager;

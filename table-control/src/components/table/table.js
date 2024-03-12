@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import Row from '../row/row.js'
 import './table.css'
-
-const Replicator = require('replicator')
+import { exportImportHelper } from '../../logic/exportImportHelper.js';
+import rangeManager from '../../logic/rangeManager.js';
+import range from '../../logic/range.js';
 
 const maxColumnLength = 64;
 const maxRowLength = 2048;
@@ -34,23 +35,7 @@ function Table({colMgr, rowMgr}) {
         row.rangeMgr.addCell(cellData);
         newTd = adjustRowIndexes(newTd);
         newTd = copyTableData(newTd)
-    
-        console.log(`>>>>serialization trials...`);
-        const replicator = new Replicator();
-        const str = replicator.encode({
-            key1: newTd
-        });
-        console.log(str);
-        const newTd1 = replicator.decode(str);
-        console.log(newTd1);
-
-        // console.log(`>>>>serialization trials...`);
-        // let str = JSON.stringify(newTd);
-        // console.log(JSON.stringify(newTd));
-        // var newTd1 = JSON.parse(str);
-        // console.log(newTd1);
-
-        setTableData(newTd);;
+        setTableData(newTd);
     };
     function handleDeleteRow(cellData) {
         let newTd = tableData;
@@ -103,6 +88,19 @@ function Table({colMgr, rowMgr}) {
         cell.rangeMgr.handleClick(cell);
         setTableData(copyTableData(tableData))
     }
+    async function handleExport(){
+        await exportImportHelper.handleExport(tableData);
+    }
+    async function handleImport(){
+        console.log("before import handling...")
+        let newTd = (await exportImportHelper.handleImport()).tableData;
+        console.log("after import handling...")
+        console.log(newTd);
+
+        newTd = adjustRowIndexes(newTd);
+        newTd = copyTableData(newTd)
+        setTableData(newTd);
+    }
 
     function adjustRowIndexes(tableData){
         for(let i = 0; i < tableData.rows.length; i++){
@@ -116,15 +114,6 @@ function Table({colMgr, rowMgr}) {
             }
         }
         return tableData;
-    }
-    
-    function getTableData(){
-        console.log('$$$$$$$$$$$');
-        return '';
-    }
-
-    function applyTableData(tableData){
-
     }
 
     function getNewRow(tableData, previousRow, useId = true){
@@ -264,7 +253,9 @@ function Table({colMgr, rowMgr}) {
                                 addColumn={handleAddColumn}
                                 deleteColumn={handleDeleteColumn}
                                 cellTextInput={handleHeaderColumnInput}
-                                cellClick={handleCellClick}/>
+                                cellClick={handleCellClick}
+                                exportHandler={handleExport}
+                                importHandler={handleImport}/>
                         )
                         })
                     }
