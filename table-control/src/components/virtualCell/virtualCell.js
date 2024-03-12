@@ -1,6 +1,6 @@
 import './virtualCell.css' 
 import Button from '../button/button.js';
-import { replace } from '../../logic/rangeManagersFactory.js';
+import { replace } from '../../logic/utils.js';
 
 function VirtualCell({cellData, addRow, deleteRow, addColumn, deleteColumn, exportHandler, importHandler, rowMgr}) {
     let itemContentLeft = null;

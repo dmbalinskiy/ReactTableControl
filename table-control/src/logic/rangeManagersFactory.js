@@ -1,24 +1,9 @@
 import rangeManager from "./rangeManager";
-
-function replace(value, toReplace) {return (value === null || value === undefined) ? toReplace : value; }
-
-function addIfNotContains(valueToAdd, valueToCheck){
-    valueToAdd = replace(valueToAdd, '');
-    valueToCheck = replace(valueToCheck, '');
-    if(!valueToCheck.includes(valueToAdd)){
-        valueToCheck = `${valueToAdd} ${valueToCheck}`;
-    }
-    return valueToCheck;
-}
-
-function removeIfContains(valueToRemove, valueToCheck){
-    valueToRemove = replace(valueToRemove, '');
-    valueToCheck = replace(valueToCheck, '');
-    if(valueToCheck.includes(valueToRemove)){
-        valueToCheck = valueToCheck.replace(valueToRemove, '');
-    }
-    return valueToCheck;
-}
+import {addIfNotContains, removeIfContains, replace } from './utils'
+import { cellModifierValue } from "./cellModifierValue";
+import { cellModifierSelectorSimple } from "./cellModifierSelectorSimple";
+import { cellModifierSelectorComplex } from "./cellModifierSelectorComplex";
+import { cellModifierSelectorAndValue } from "./cellModifierSelectorAndValue";
 
 function getVerticalManagerForTable1(){
 
@@ -29,7 +14,9 @@ function getVerticalManagerForTable1(){
     (cellData) => { 
         cellData.classes = removeIfContains('vertical', cellData.classes); 
         cellData.isHeader = true; 
-        return cellData;}, 
+        return cellData;
+      
+      }, 
 
     (cellData) => cellData
     );
@@ -176,9 +163,6 @@ function cellDataClickHandler (cellData) {
 }
 
 export {
-    replace,
-    addIfNotContains,
-    removeIfContains,
     getVerticalManagerForTable1, 
     getVerticalManagerForTable2,
     getHorizontalManagerForTables,

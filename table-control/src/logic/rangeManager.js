@@ -1,5 +1,5 @@
 import rangeDef from './range'
-import { addIfNotContains, removeIfContains } from './rangeManagersFactory';
+import { addIfNotContains, removeIfContains } from './utils';
 
 class rangeManager {
     constructor(isColumnRange, ranges = []){
