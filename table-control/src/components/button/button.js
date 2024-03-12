@@ -6,6 +6,8 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 function Button({handler, data, type, text, isEnabled= true}) {
     let icon = faEnvelope;
@@ -23,6 +25,12 @@ function Button({handler, data, type, text, isEnabled= true}) {
     }
     else if(type.includes('delete') ){
         icon = faTrashCan;
+    }
+    else if(type.includes('export')){
+        icon = faSave;
+    }
+    else if(type.includes('import')){
+        icon = faDownload;
     }
     return (
         <button disabled={!isEnabled} className={`${isEnabled ? '' : 'disabled'} ${type}`} onClick={() => handler(data)}>

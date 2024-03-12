@@ -118,6 +118,15 @@ function Table({colMgr, rowMgr}) {
         return tableData;
     }
     
+    function getTableData(){
+        console.log('$$$$$$$$$$$');
+        return '';
+    }
+
+    function applyTableData(tableData){
+
+    }
+
     function getNewRow(tableData, previousRow, useId = true){
         let cells = previousRow.cells.map(
             (val, idx) =>{
