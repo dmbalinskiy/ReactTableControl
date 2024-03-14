@@ -1,3 +1,7 @@
+import { cellModifierSelectorAndValue } from './cellModifierSelectorAndValue';
+import { cellModifierSelectorComplex } from './cellModifierSelectorComplex';
+import { cellModifierSelectorSimple } from './cellModifierSelectorSimple';
+import { cellModifierValue } from './cellModifierValue';
 import range from './range';
 import rangeManager from './rangeManager';
 
@@ -73,8 +77,8 @@ export class exportImportHelper {
                         isColumnRange: range.isColumnRange,
                         isFixedRange: range.isFixedRange,
                         isEditableCell: range.isEditableCell,
-                        cellModifier: range.cellModifier.toString(),
-                        cellClickHandler: range.cellClickHandler.toString(),
+                        cellClickHandlerIndex: range.cellClickHandlerIndex,
+                        cellModifiers: range.cellModifiers,
                     }
                     return obj;
                 },
@@ -87,14 +91,15 @@ export class exportImportHelper {
                         val.isColumnRange,
                         val.isFixedRange,
                         val.isEditableCell,
-                        eval(val.cellModifier),
-                        eval(val.cellClickHandler),
+                        val.cellClickHandlerIndex,
+                        val.cellModifiers,
                     )
                 }
             },
             {
                 type: 'rangeManager',
                 shouldTransform (type, val) {
+                    console.log(val);
                     return val instanceof rangeManager;
                 },
         
@@ -113,6 +118,62 @@ export class exportImportHelper {
                     )
                 }
             },
+            {
+                type : "cellModifierValue",
+                shouldTransform(type, val) {
+                    return val instanceof cellModifierValue;
+                },
+                toSerializable(cellModifierValue) {
+                    return cellModifierValue.ToObject();
+                },
+                fromSerializable(val){
+                    let value = new cellModifierValue();
+                    value.FromObject(val);
+                    return value;
+                }
+            },
+            {
+                type: "cellModifierSelectorAndValue",
+                shouldTransform(type, val) {
+                    return val instanceof cellModifierSelectorAndValue;
+                },
+                toSerializable(cellModifierSelectorAndValue){
+                    return cellModifierSelectorAndValue.ToObject();
+                },
+                fromSerializable(val){
+                    let value = new cellModifierSelectorAndValue();
+                    value.FromObject(val);
+                    return value;
+                }
+            },
+            {
+                type: "cellModifierSelectorSimple",
+                shouldTransform(type, val){
+                    return val instanceof cellModifierSelectorSimple;
+                },
+                toSerializable(cellModifierSelectorSimple){
+                    return cellModifierSelectorSimple.ToObject();
+                },
+                fromSerializable(val){
+                    let value = new cellModifierSelectorAndValue();
+                    value.FromObject(val);
+                    return value;
+                }
+            },
+            {
+                type: "cellModifierSelectorComplex",
+                shouldTransform(type, val){
+                    return val instanceof cellModifierSelectorComplex;
+                },
+                toSerializable(cellModifierSelectorComplex){
+                    return cellModifierSelectorComplex.ToObject();
+                },
+                fromSerializable(val){
+                    let value = new cellModifierSelectorComplex();
+                    value.FromObject(val);
+                    return value;
+                }
+            }
 
         ];
     }

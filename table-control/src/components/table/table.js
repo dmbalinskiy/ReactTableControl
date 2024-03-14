@@ -83,8 +83,9 @@ function Table({colMgr, rowMgr}) {
         
     }
     function handleCellClick(cell){
-        cell.rangeMgr.handleClick(cell);
-        setTableData(copyTableData(tableData))
+        if(cell.rangeMgr.handleClick(cell)){
+            setTableData(copyTableData(tableData))
+        }
     }
     async function handleExport(){
         await exportImportHelper.handleExport(tableData);

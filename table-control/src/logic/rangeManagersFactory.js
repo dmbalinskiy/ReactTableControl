@@ -62,7 +62,7 @@ function getVerticalManagerForTable1(){
 
   //for virtual items - fixed
   table1VertMgr.createAndAddRange(1, 1, true, false, -1, 
-    (cellData) => { 
+    () => { 
         let modifiersArray = [];
 
         let value = new cellModifierValue();
@@ -80,8 +80,8 @@ function getVerticalManagerForTable1(){
           new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 0),
           new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 1))
         modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
-        console.log(modifiersArray);
-        return modifiersArray;}); 
+        return modifiersArray;
+      }); 
 
   return table1VertMgr;
 }
@@ -101,7 +101,7 @@ function getHorizontalManagerForTables(){
   
             value = new cellModifierValue();
             value.isExportImport = true;
-            value.classesToAdd.push('vertical');
+            value.classesToAdd.push('exportImport');
             let logicFcn = new cellModifierSelectorComplex(
               FunctionType.And, 
               new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 0),
@@ -176,43 +176,33 @@ function getVerticalManagerForTable2(){
 
   //for virtual items - fixed
   table2VertMgr.createAndAddRange(1, 1, true, false, -1,
-    () => {
-      let value = new cellModifierValue();
-        value.classesToAdd.push('vertical');
+      () => {
+        let modifiersArray = [];
+
+        let value = new cellModifierValue();
+        value.classesToRemove.push('vertical');
         value.isVirtual = true;
-        return [ new cellModifierSelectorAndValue(value)];
+        modifiersArray.push(new cellModifierSelectorAndValue(value));
+
+
+        value = new cellModifierValue();
+        value.isExportImport = true;
+        value.classesToAdd.push('exportImport');
+
+        let logicFcn = new cellModifierSelectorComplex(
+          FunctionType.Or, 
+          new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 0),
+          new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 1))
+        modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
+        return modifiersArray;
     });
 
     return table2VertMgr;
-}
-
-function cellDataClickHandler (cellData) {
-
-  cellData.classes = removeIfContains('ok', cellData.classes); 
-  cellData.classes = removeIfContains('warning', cellData.classes); 
-  cellData.classes = removeIfContains('error', cellData.classes); 
-
-  if(!cellData.text || cellData.text === ""){
-    cellData.text = '10';
-    cellData.classes = addIfNotContains('ok', cellData.classes);
-  }
-  else if(cellData.text === '10'){
-    cellData.text = '11';
-    cellData.classes = addIfNotContains('warning', cellData.classes);
-  }
-  else if(cellData.text === '11'){
-    cellData.text = '01';
-    cellData.classes = addIfNotContains('error', cellData.classes);
-  }
-  else if(cellData.text === '01'){
-    cellData.text = '';
-  }
 }
 
 export {
     getVerticalManagerForTable1, 
     getVerticalManagerForTable2,
     getHorizontalManagerForTables,
-    cellDataClickHandler
 
 }

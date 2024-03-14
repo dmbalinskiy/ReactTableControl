@@ -114,7 +114,7 @@ class rangeManager {
 
     handleClick(cellData){
         const range = this.#getRangeByCellData(cellData);
-        range.handleClick(cellData);
+        return range.handleClick(cellData);
     }
 
     #getRangeByIdx(idx){

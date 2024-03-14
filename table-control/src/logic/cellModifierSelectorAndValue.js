@@ -39,8 +39,6 @@ class cellModifierSelectorAndValue {
     }
 
     Evaluate(cellData){
-        // console.log('cellModifierSelectorAndValue::evaluate()');
-        // console.log(cellData);
         let result = this.#cellModifierSelector?.Evaluate(cellData) ?? true;
         if(result){
             this.#cellModifierValue.ApplyToCellData(cellData);

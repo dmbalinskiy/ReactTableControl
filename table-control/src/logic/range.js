@@ -1,3 +1,4 @@
+import { addIfNotContains, removeIfContains } from './utils';
 
 export class range {
     constructor (
@@ -21,8 +22,6 @@ export class range {
         this.#isEditableCell = isEditableCell;
         this.#cellClickHandlerIndex = cellClickHandlerIndex;
 
-        console.log(this);
-        console.log(cellModifierFactory);
         console.log(cellModifierFactory());
         this.#cellModifiers = cellModifierFactory();
         
@@ -64,7 +63,7 @@ export class range {
     }
 
     #cellModifiers;
-    get cellModifier() {
+    get cellModifiers() {
         return this.#cellModifiers;
     }
 
@@ -114,15 +113,16 @@ export class range {
         for(let modifierSelectorAndValue of this.#cellModifiers){
             modifierSelectorAndValue.Evaluate(cellData);
         }
-        // console.log('>>>after_applyCellModifiers()')
-        // console.log(this.#cellModifiers);
-        // console.log(cellData);
         return cellData;
     }
 
 
     handleClick(cellData){
-        this.cellClickHandler(cellData);
+        if(this.#cellClickHandlerIndex !== 1)
+            return false;
+
+        this.cellDataClickHandler(cellData);
+        return true;
     }
 
     updateIndexesOnOtherRangeAddition(){
@@ -134,6 +134,29 @@ export class range {
         --this.#currentRangeStartIdx;
         --this.#currentRangeEndIdx;
     }
+
+    cellDataClickHandler (cellData) {
+
+        cellData.classes = removeIfContains('ok', cellData.classes); 
+        cellData.classes = removeIfContains('warning', cellData.classes); 
+        cellData.classes = removeIfContains('error', cellData.classes); 
+      
+        if(!cellData.text || cellData.text === ""){
+          cellData.text = '10';
+          cellData.classes = addIfNotContains('ok', cellData.classes);
+        }
+        else if(cellData.text === '10'){
+          cellData.text = '11';
+          cellData.classes = addIfNotContains('warning', cellData.classes);
+        }
+        else if(cellData.text === '11'){
+          cellData.text = '01';
+          cellData.classes = addIfNotContains('error', cellData.classes);
+        }
+        else if(cellData.text === '01'){
+          cellData.text = '';
+        }
+      }
 }
 
 export default range;

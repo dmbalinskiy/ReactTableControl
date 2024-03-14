@@ -14,18 +14,18 @@ class cellModifierValue {
     }
 
     #isVirtualValue = undefined
-    get IsVirtual(){
+    get isVirtual(){
         return this.#isVirtualValue;
     }
-    set IsVirtual(value){
+    set isVirtual(value){
         this.#isVirtualValue = value;
     }
 
     #isHeaderValue = undefined
-    get IsHeader(){
+    get isHeader(){
         return this.#isHeaderValue;
     }
-    set IsHeader(value){
+    set isHeader(value){
         this.#isHeaderValue = value;
     }
 
@@ -47,11 +47,10 @@ class cellModifierValue {
     }
 
     FromObject(val) {
-        var cmv = new cellModifierValue();
-        cmv.classesToAdd = val.classesToAdd;
-        cmv.classesToRemove = val.classesToRemove;
-        cmv.isVirtual = val.isVirtual;
-        cmv.isHeader = val.isHeader;
+        this.classesToAdd = val.classesToAdd;
+        this.classesToRemove = val.classesToRemove;
+        this.isVirtual = val.isVirtual;
+        this.isHeader = val.isHeader;
     }
 
     ApplyToCellData(cellData){

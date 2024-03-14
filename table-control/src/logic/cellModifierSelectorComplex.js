@@ -34,9 +34,7 @@ class cellModifierSelectorComplex {
     ToObject() {
         return {
             functionType : this.#functionType.toString(),
-            arguments : this.#arguments.map((e, idx) => {
-                e.ToObject();
-            })
+            arguments : this.#arguments,
         }
     }
 
