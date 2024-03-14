@@ -39,26 +39,18 @@ class cellModifierSelectorComplex {
     }
 
     FromObject(val) {
-        let result;
         this.#functionType = new FunctionType(val.functionType);
-        this.#arguments = val.arguments.map((val, idx) => {
-            if(val.functionType !== undefined){
-                result = new cellModifierSelectorComplex();
-                result.FromObject(val);
-            }
-            else if(val.condition !== undefined){
-                result = new cellModifierSelectorSimple();
-                result.FromObject(val);
-            }
-        })
+        this.arguments = val.arguments;
     }
 
     Evaluate(cellData){
+
         let result = false;
         if(this.#functionType.toString() === FunctionType.Not.toString()){
             result = !(this.#arguments[0].Evaluate(cellData));
         }
         else if(this.#functionType.toString() === FunctionType.And.toString()){
+            result = true;
             for(let arg of this.#arguments){
                 result = result && arg.Evaluate(cellData);
                 if(!result){

@@ -1,5 +1,4 @@
 import rangeManager from "./rangeManager";
-import {addIfNotContains, removeIfContains, replace } from './utils'
 import { cellModifierValue } from "./cellModifierValue";
 import { cellModifierSelectorSimple, condition, fieldForCheck } from "./cellModifierSelectorSimple";
 import { FunctionType, cellModifierSelectorComplex } from "./cellModifierSelectorComplex";
@@ -11,58 +10,58 @@ function getVerticalManagerForTable1(){
 
   //range for headers - fixed
   table1VertMgr.createAndAddRange(2, 2, true, true, -1, 
-    () => { 
+    function () { 
 
         let value = new cellModifierValue();
         value.isHeader = true;
         value.classesToRemove.push('vertical');
         return [ new cellModifierSelectorAndValue(value)];
-      }, 
+      } (), 
     );
 
   //for sensors - expandable
   table1VertMgr.createAndAddRange(1, 12, false, false, 1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    }); 
+    } ()); 
 
   //for commands - expandable
   table1VertMgr.createAndAddRange(1, 8, false, false, 1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    }); 
+    } ()); 
 
   //for transition sign - fixed
   table1VertMgr.createAndAddRange(1, 1, true, true, -1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    }); 
+    } ()); 
   
   //for transition address - fixed
   table1VertMgr.createAndAddRange(1, 1, true, true, -1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    }); 
+    } ()); 
 
   //for prohibited combination - fixed
   table1VertMgr.createAndAddRange(1, 1, true, true, -1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    }); 
+    } ()); 
 
   //for virtual items - fixed
   table1VertMgr.createAndAddRange(1, 1, true, false, -1, 
-    () => { 
+    function () { 
         let modifiersArray = [];
 
         let value = new cellModifierValue();
@@ -81,7 +80,7 @@ function getVerticalManagerForTable1(){
           new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 1))
         modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
         return modifiersArray;
-      }); 
+      } ()); 
 
   return table1VertMgr;
 }
@@ -91,7 +90,7 @@ function getHorizontalManagerForTables(){
 
     //range for headers - fixed
     horManager.createAndAddRange(2, 2, true, true, -1,
-        () => { 
+      function () { 
           
             let modifiersArray = [];
 
@@ -113,19 +112,25 @@ function getHorizontalManagerForTables(){
             logicFcn = new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 1);
             modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
 
-            return modifiersArray;
-        });
 
-    horManager.createAndAddRange(1, 128, false, false, -1, () => []);
+            value = new cellModifierValue();
+            value.classesToAdd.push('vertical');
+            logicFcn = new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 0);
+            modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
+
+            return modifiersArray;
+        } ());
+
+    horManager.createAndAddRange(1, 128, false, false, -1, function () {return []}()  );
     
     //for virtual items - fixed
     horManager.createAndAddRange(1, 1, true, false, -1,
-        () => { 
+      function () { 
             let value = new cellModifierValue();
             value.classesToAdd.push('vertical');
             value.isVirtual = true;
             return [new cellModifierSelectorAndValue(value)];
-        }); 
+        } ()); 
 
     return horManager;
 }
@@ -135,48 +140,48 @@ function getVerticalManagerForTable2(){
 
   //range for headers - fixed
   table2VertMgr.createAndAddRange(2, 2, true, true, -1,
-    () => {
+    function () {
       let value = new cellModifierValue();
       value.isHeader = true;
       value.classesToRemove.push('vertical');
       return [ new cellModifierSelectorAndValue(value)];
-    });
+    } ());
 
   //for transition address - fixed
   table2VertMgr.createAndAddRange(1, 1, true, true, -1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    } ); 
+    } ()); 
 
   //for logic operation type - fixed
   table2VertMgr.createAndAddRange(1, 1, true, true, -1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    } ); 
+    } ()); 
 
     //for sensors - expandable
   table2VertMgr.createAndAddRange(1, 12, false, false, -1,
-    () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    } ); 
+    } ()); 
   
     //for commands - expandable
   table2VertMgr.createAndAddRange(1, 8, false, false, -1,
-      () => {
+    function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
         return [ new cellModifierSelectorAndValue(value)];
-    }); 
+    }()); 
 
   //for virtual items - fixed
   table2VertMgr.createAndAddRange(1, 1, true, false, -1,
-      () => {
+      function (){
         let modifiersArray = [];
 
         let value = new cellModifierValue();
@@ -195,7 +200,7 @@ function getVerticalManagerForTable2(){
           new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 1))
         modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
         return modifiersArray;
-    });
+    } ());
 
     return table2VertMgr;
 }

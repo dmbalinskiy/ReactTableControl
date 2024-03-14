@@ -99,7 +99,6 @@ export class exportImportHelper {
             {
                 type: 'rangeManager',
                 shouldTransform (type, val) {
-                    console.log(val);
                     return val instanceof rangeManager;
                 },
         

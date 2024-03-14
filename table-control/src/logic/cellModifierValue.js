@@ -47,8 +47,8 @@ class cellModifierValue {
     }
 
     FromObject(val) {
-        this.classesToAdd = val.classesToAdd;
-        this.classesToRemove = val.classesToRemove;
+        this.#classesToAdd = val.classesToAdd;
+        this.#classesToRemove = val.classesToRemove;
         this.isVirtual = val.isVirtual;
         this.isHeader = val.isHeader;
     }

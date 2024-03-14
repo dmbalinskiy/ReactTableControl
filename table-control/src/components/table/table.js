@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import Row from '../row/row.js'
 import './table.css'
 import { exportImportHelper } from '../../logic/exportImportHelper.js';
-import rangeManager from '../../logic/rangeManager.js';
-import range from '../../logic/range.js';
 
 const maxColumnLength = 64;
 const maxRowLength = 2048;

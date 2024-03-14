@@ -9,7 +9,7 @@ export class range {
         isFixedRange, 
         isEditableCell, 
         cellClickHandlerIndex,
-        cellModifierFactory){
+        cellModifiers){
 
         this.#currentRangeStartIdx = startRange;
         this.#currentRangeEndIdx = endRange;
@@ -22,8 +22,7 @@ export class range {
         this.#isEditableCell = isEditableCell;
         this.#cellClickHandlerIndex = cellClickHandlerIndex;
 
-        console.log(cellModifierFactory());
-        this.#cellModifiers = cellModifierFactory();
+        this.#cellModifiers = cellModifiers;
         
     }
 
