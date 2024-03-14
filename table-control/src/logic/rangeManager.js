@@ -22,8 +22,8 @@ class rangeManager {
         maxCount,
         isFixedRange,
         isEditableCell,
-        cellModifier,
-        cellClickHandler
+        cellClickHandlerIndex,
+        cellModifierFactory,
         ){
         let range = new rangeDef(
             this.#getLastRangePosition() + 1,
@@ -32,9 +32,9 @@ class rangeManager {
             this.isColumnRange,
             isFixedRange,
             isEditableCell,
-            cellModifier,
-            cellClickHandler);
-        this.#rangeArray.push(range);
+            cellClickHandlerIndex,
+            cellModifierFactory);
+        this.#rangeArray.push(range); 
     }
 
     applyBorderModifier(cellData){
@@ -68,14 +68,12 @@ class rangeManager {
         return cellData;
     }
 
-    getCellModifier(idx){
+    applyCellModifiers(idx, cellData){
         const range = this.#getRangeByIdx(idx);
-        return (cellData) => {
-            cellData.editable = range.isEditableCell;
-            cellData = range.cellModifier(cellData);
-            cellData = this.applyBorderModifier(cellData);
-            return cellData;
-        }
+        cellData.editable = range.isEditableCell;
+        cellData = range.applyCellModifiers(cellData);
+        cellData = this.applyBorderModifier(cellData);
+        return cellData;
     }
 
     isCellStartRangeStart(cellData){

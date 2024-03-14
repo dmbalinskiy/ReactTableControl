@@ -7,8 +7,6 @@ function VirtualCell({cellData, addRow, deleteRow, addColumn, deleteColumn, expo
     let itemContentCenter = null;
     let itemContentRight = null;
 
-    //console.log(cellData);
-
     if(cellData.isExportImportCell){
         itemContentLeft = 
             <Button handler={() => exportHandler()}

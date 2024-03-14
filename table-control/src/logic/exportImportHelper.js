@@ -58,7 +58,6 @@ export class exportImportHelper {
     }
 
     static getReplicatorTransforms(){
-        console.log(`getTransforms ....`)
         return [
             {
                 type: 'range',
@@ -104,7 +103,6 @@ export class exportImportHelper {
                         isColumnRange : rangeManager.isColumnRange,
                         ranges : rangeManager.ranges,
                     }
-                    console.log(obj);
                     return obj;
                 },
         

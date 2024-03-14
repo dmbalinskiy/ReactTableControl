@@ -70,7 +70,7 @@ class cellModifierSelectorComplex {
         }
         else if(this.#functionType.toString() === FunctionType.Or.toString()){
             for(let arg of this.#arguments){
-                result = result && arg.Evaluate(cellData);
+                result = result || arg.Evaluate(cellData);
                 if(result){
                     break;
                 }

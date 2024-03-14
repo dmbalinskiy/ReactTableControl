@@ -7,32 +7,34 @@ class cellModifierValue {
     get classesToRemove(){
         return this.#classesToRemove;
     }
-    set classesToRemove(value){
-        this.#classesToRemove = value;
-    }
 
     #classesToAdd = []
     get classesToAdd() {
         return this.#classesToAdd;
     }
-    set classesToAdd(value) {
-        this.#classesToAdd = value;
-    }
 
     #isVirtualValue = undefined
-    getIsVirtual(){
+    get IsVirtual(){
         return this.#isVirtualValue;
     }
-    setIsVirtual(value){
+    set IsVirtual(value){
         this.#isVirtualValue = value;
     }
 
     #isHeaderValue = undefined
-    getIsHeader(){
+    get IsHeader(){
         return this.#isHeaderValue;
     }
-    setIsHeader(value){
+    set IsHeader(value){
         this.#isHeaderValue = value;
+    }
+
+    #isExportImport = undefined
+    get isExportImport() {
+        return this.#isExportImport;
+    }
+    set isExportImport(value){
+        this.#isExportImport = value;
     }
 
     ToObject(){
@@ -64,6 +66,9 @@ class cellModifierValue {
         }
         if(this.#isHeaderValue !== undefined){
             cellData.isHeader = this.#isHeaderValue;
+        }
+        if(this.#isExportImport !== undefined){
+            cellData.isExportImportCell = this.#isExportImport;
         }
     }
 }

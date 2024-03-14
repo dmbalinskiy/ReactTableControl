@@ -7,8 +7,8 @@ export class range {
         isColumnRange, 
         isFixedRange, 
         isEditableCell, 
-        cellModifier,
-        cellClickHandler){
+        cellClickHandlerIndex,
+        cellModifierFactory){
 
         this.#currentRangeStartIdx = startRange;
         this.#currentRangeEndIdx = endRange;
@@ -19,8 +19,13 @@ export class range {
         this.#isColumnRange = isColumnRange;
         this.#isFixedRange = isFixedRange;
         this.#isEditableCell = isEditableCell;
-        this.#cellModifier = cellModifier;
-        this.#cellClickHandler = cellClickHandler;
+        this.#cellClickHandlerIndex = cellClickHandlerIndex;
+
+        console.log(this);
+        console.log(cellModifierFactory);
+        console.log(cellModifierFactory());
+        this.#cellModifiers = cellModifierFactory();
+        
     }
 
     #currentRangeStartIdx = -1;
@@ -53,14 +58,14 @@ export class range {
         return this.#isEditableCell;
     }
 
-    #cellClickHandler;
-    get cellClickHandler() {
-        return this.#cellClickHandler
+    #cellClickHandlerIndex;
+    get cellClickHandlerIndex() {
+        return this.#cellClickHandlerIndex
     }
 
-    #cellModifier;
+    #cellModifiers;
     get cellModifier() {
-        return this.#cellModifier;
+        return this.#cellModifiers;
     }
 
     isCellStartRangeStart(cellData){
@@ -104,9 +109,19 @@ export class range {
         }
     }
 
+    applyCellModifiers(cellData){
+
+        for(let modifierSelectorAndValue of this.#cellModifiers){
+            modifierSelectorAndValue.Evaluate(cellData);
+        }
+        // console.log('>>>after_applyCellModifiers()')
+        // console.log(this.#cellModifiers);
+        // console.log(cellData);
+        return cellData;
+    }
+
+
     handleClick(cellData){
-        console.log(this);
-        console.log(this.cellClickHandler);
         this.cellClickHandler(cellData);
     }
 

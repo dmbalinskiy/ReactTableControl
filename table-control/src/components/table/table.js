@@ -70,7 +70,6 @@ function Table({colMgr, rowMgr}) {
         setTableData(newTd);;
     }
     function handleHeaderColumnInput(cell, newText){
-        console.log(`new text: ${newText}`);
         let currSelection = document.getSelection();
         selection.current = 
         {   
@@ -84,7 +83,6 @@ function Table({colMgr, rowMgr}) {
         
     }
     function handleCellClick(cell){
-        console.log(cell);
         cell.rangeMgr.handleClick(cell);
         setTableData(copyTableData(tableData))
     }
@@ -92,11 +90,7 @@ function Table({colMgr, rowMgr}) {
         await exportImportHelper.handleExport(tableData);
     }
     async function handleImport(){
-        console.log("before import handling...")
         let newTd = (await exportImportHelper.handleImport()).tableData;
-        console.log("after import handling...")
-        console.log(newTd);
-
         newTd = adjustRowIndexes(newTd);
         newTd = copyTableData(newTd)
         setTableData(newTd);
@@ -109,8 +103,8 @@ function Table({colMgr, rowMgr}) {
             for(let j = 0; j < row.cells.length; j++){
                 let cell = row.cells[j];
                 adjustCellIndex(cell, j, i, tableData.rows.length, row.cells.length, false, row.id);
-                cell = row.rangeMgr.getCellModifier(row.idx)(cell);
-                cell = cell.rangeMgr.getCellModifier(cell.idx)(cell);
+                cell = row.rangeMgr.applyCellModifiers(row.idx, cell);
+                cell = cell.rangeMgr.applyCellModifiers(cell.idx, cell);
             }
         }
         return tableData;
@@ -122,8 +116,10 @@ function Table({colMgr, rowMgr}) {
                 var cell = {
                     id : val.id,
                     text: ``,
+                    classes: '',
+                    isVirtual : false,
                     rangeMgr: val.rangeMgr,
-                    isHeader: idx === 0,
+                    isHeader: false,
                 }
                 return cell;
             });
@@ -204,10 +200,12 @@ function Table({colMgr, rowMgr}) {
                         let cellData = {
                             id: 0, 
                             idx: colIdx,
+                            rowIdx: rowIdx,
                             isVirtual: false,
+                            classes: '',
                             rangeMgr: colMgr,
                         }
-                        cellData = colRng.cellModifier(rowRng.cellModifier(cellData));
+                        cellData = colRng.applyCellModifiers(rowRng.applyCellModifiers(cellData));
                         row.cells.push(cellData);
                         ++colIdx;
                     }

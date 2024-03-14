@@ -1,8 +1,8 @@
 import rangeManager from "./rangeManager";
 import {addIfNotContains, removeIfContains, replace } from './utils'
 import { cellModifierValue } from "./cellModifierValue";
-import { cellModifierSelectorSimple } from "./cellModifierSelectorSimple";
-import { cellModifierSelectorComplex } from "./cellModifierSelectorComplex";
+import { cellModifierSelectorSimple, condition, fieldForCheck } from "./cellModifierSelectorSimple";
+import { FunctionType, cellModifierSelectorComplex } from "./cellModifierSelectorComplex";
 import { cellModifierSelectorAndValue } from "./cellModifierSelectorAndValue";
 
 function getVerticalManagerForTable1(){
@@ -10,53 +10,78 @@ function getVerticalManagerForTable1(){
   let table1VertMgr = new rangeManager(true);
 
   //range for headers - fixed
-  table1VertMgr.createAndAddRange(2, 2, true, true, 
-    (cellData) => { 
-        cellData.classes = removeIfContains('vertical', cellData.classes); 
-        cellData.isHeader = true; 
-        return cellData;
-      
-      }, 
+  table1VertMgr.createAndAddRange(2, 2, true, true, -1, 
+    () => { 
 
-    (cellData) => cellData
+        let value = new cellModifierValue();
+        value.isHeader = true;
+        value.classesToRemove.push('vertical');
+        return [ new cellModifierSelectorAndValue(value)];
+      }, 
     );
 
   //for sensors - expandable
-  table1VertMgr.createAndAddRange(1, 12, false, false, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => {cellDataClickHandler(cellData)} ); 
+  table1VertMgr.createAndAddRange(1, 12, false, false, 1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    }); 
 
   //for commands - expandable
-  table1VertMgr.createAndAddRange(1, 8, false, false, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => {cellDataClickHandler(cellData)} ); 
+  table1VertMgr.createAndAddRange(1, 8, false, false, 1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    }); 
 
   //for transition sign - fixed
-  table1VertMgr.createAndAddRange(1, 1, true, true, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => { }); 
+  table1VertMgr.createAndAddRange(1, 1, true, true, -1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    }); 
   
   //for transition address - fixed
-  table1VertMgr.createAndAddRange(1, 1, true, true, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => { }); 
+  table1VertMgr.createAndAddRange(1, 1, true, true, -1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    }); 
 
   //for prohibited combination - fixed
-  table1VertMgr.createAndAddRange(1, 1, true, true, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData },  
-    (cellData) => { }); 
+  table1VertMgr.createAndAddRange(1, 1, true, true, -1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    }); 
 
   //for virtual items - fixed
-  table1VertMgr.createAndAddRange(1, 1, true, false, 
+  table1VertMgr.createAndAddRange(1, 1, true, false, -1, 
     (cellData) => { 
-        cellData.classes = removeIfContains('vertical', cellData.classes); 
-        cellData.isVirtual = true; 
-        if(cellData.rowIdx === 0 || cellData.rowIdx === 1){
-              cellData.isExportImportCell = true;
-              cellData.classes = addIfNotContains('exportImport', cellData.classes)
-        }
-        return cellData;}, 
-    (cellData) => { }); 
+        let modifiersArray = [];
+
+        let value = new cellModifierValue();
+        value.classesToRemove.push('vertical');
+        value.isVirtual = true;
+        modifiersArray.push(new cellModifierSelectorAndValue(value));
+
+
+        value = new cellModifierValue();
+        value.isExportImport = true;
+        value.classesToAdd.push('exportImport');
+
+        let logicFcn = new cellModifierSelectorComplex(
+          FunctionType.Or, 
+          new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 0),
+          new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 1))
+        modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
+        console.log(modifiersArray);
+        return modifiersArray;}); 
 
   return table1VertMgr;
 }
@@ -65,30 +90,42 @@ function getHorizontalManagerForTables(){
     let horManager = new rangeManager(false);
 
     //range for headers - fixed
-    horManager.createAndAddRange(2, 2, true, true, 
-        (cellData) => { 
-            cellData.isHeader = true;  
-            if(cellData.rowIdx === 0 && cellData.idx > 1){
-                cellData.classes = addIfNotContains('vertical', cellData.classes);
-            }
-            if(cellData.idx === 1){
-                cellData.classes = addIfNotContains('narrow', cellData.classes);
-            }
-            return cellData;
-        }, 
-        (cellData) => { });
+    horManager.createAndAddRange(2, 2, true, true, -1,
+        () => { 
+          
+            let modifiersArray = [];
 
-    horManager.createAndAddRange(1, 128, false, false, 
-        (cellData) => { return cellData;}, 
-        (cellData) => { });
+            let value = new cellModifierValue();
+            value.isHeader = true;
+            modifiersArray.push(new cellModifierSelectorAndValue(value));
+  
+            value = new cellModifierValue();
+            value.isExportImport = true;
+            value.classesToAdd.push('vertical');
+            let logicFcn = new cellModifierSelectorComplex(
+              FunctionType.And, 
+              new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 0),
+              new cellModifierSelectorSimple(fieldForCheck.ColIdx, condition.Gt, 1))
+            modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
+
+            value = new cellModifierValue();
+            value.classesToAdd.push('narrow');
+            logicFcn = new cellModifierSelectorSimple(fieldForCheck.RowIdx, condition.Eq, 1);
+            modifiersArray.push(new cellModifierSelectorAndValue(value, logicFcn));
+
+            return modifiersArray;
+        });
+
+    horManager.createAndAddRange(1, 128, false, false, -1, () => []);
     
     //for virtual items - fixed
-    horManager.createAndAddRange(1, 1, true, false, 
-        (cellData) => { 
-            cellData.classes = addIfNotContains('vertical', cellData.classes);
-            cellData.isVirtual = true; 
-            return cellData;}, 
-        (cellData) => { }); 
+    horManager.createAndAddRange(1, 1, true, false, -1,
+        () => { 
+            let value = new cellModifierValue();
+            value.classesToAdd.push('vertical');
+            value.isVirtual = true;
+            return [new cellModifierSelectorAndValue(value)];
+        }); 
 
     return horManager;
 }
@@ -97,48 +134,59 @@ function getVerticalManagerForTable2(){
   let table2VertMgr = new rangeManager(true);
 
   //range for headers - fixed
-  table2VertMgr.createAndAddRange(2, 2, true, true, 
-    (cellData) => { 
-        cellData.classes = removeIfContains('vertical', cellData.classes); 
-        cellData.isHeader = true; 
-        return cellData;}, 
-
-    (cellData) => cellData
-    );
+  table2VertMgr.createAndAddRange(2, 2, true, true, -1,
+    () => {
+      let value = new cellModifierValue();
+      value.isHeader = true;
+      value.classesToRemove.push('vertical');
+      return [ new cellModifierSelectorAndValue(value)];
+    });
 
   //for transition address - fixed
-  table2VertMgr.createAndAddRange(1, 1, true, true, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => { }); 
+  table2VertMgr.createAndAddRange(1, 1, true, true, -1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    } ); 
 
   //for logic operation type - fixed
-  table2VertMgr.createAndAddRange(1, 1, true, true, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => { }); 
+  table2VertMgr.createAndAddRange(1, 1, true, true, -1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    } ); 
 
     //for sensors - expandable
-  table2VertMgr.createAndAddRange(1, 12, false, false, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => {cellDataClickHandler(cellData)} ); 
+  table2VertMgr.createAndAddRange(1, 12, false, false, -1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    } ); 
   
     //for commands - expandable
-  table2VertMgr.createAndAddRange(1, 8, false, false, 
-    (cellData) => { cellData.classes = addIfNotContains('narrow', cellData.classes); return cellData }, 
-    (cellData) => {cellDataClickHandler(cellData)} ); 
+  table2VertMgr.createAndAddRange(1, 8, false, false, -1,
+      () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('narrow');
+        return [ new cellModifierSelectorAndValue(value)];
+    }); 
 
   //for virtual items - fixed
-  table2VertMgr.createAndAddRange(1, 1, true, false, 
-    (cellData) => { 
-        cellData.classes = removeIfContains('vertical', cellData.classes); 
-        cellData.isVirtual = true; 
-        return cellData;}, 
-    (cellData) => { }); 
+  table2VertMgr.createAndAddRange(1, 1, true, false, -1,
+    () => {
+      let value = new cellModifierValue();
+        value.classesToAdd.push('vertical');
+        value.isVirtual = true;
+        return [ new cellModifierSelectorAndValue(value)];
+    });
 
-  return table2VertMgr;
+    return table2VertMgr;
 }
 
 function cellDataClickHandler (cellData) {
-  console.log("cellDataClickHandler");
 
   cellData.classes = removeIfContains('ok', cellData.classes); 
   cellData.classes = removeIfContains('warning', cellData.classes); 
@@ -159,7 +207,6 @@ function cellDataClickHandler (cellData) {
   else if(cellData.text === '01'){
     cellData.text = '';
   }
-  console.log(cellData);
 }
 
 export {
