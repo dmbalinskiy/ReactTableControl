@@ -1,5 +1,4 @@
 import './cell.css' 
-import Button from '../button/button.js';
 import { replace } from '../../logic/utils.js';
 
 function Cell({cellData, cellClick, cellTextInput}) {

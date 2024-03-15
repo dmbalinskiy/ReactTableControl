@@ -1,5 +1,3 @@
-import {cellModifierSelectorSimple} from './cellModifierSelectorSimple'
-
 class FunctionType {
     static And = new FunctionType('&&');
     static Or = new FunctionType('||');

@@ -1,5 +1,5 @@
 
-import {addIfNotContains, removeIfContains, replace } from './utils'
+import {addIfNotContains, removeIfContains } from './utils'
 
 class cellModifierValue {
     

@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import Table from '../table/table'
-import rangeManager from '../../logic/rangeManager';
 import {
   getHorizontalManagerForTables,
   getVerticalManagerForTable1, 

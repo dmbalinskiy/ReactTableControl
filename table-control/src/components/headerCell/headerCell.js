@@ -1,5 +1,4 @@
 import './headerCell.css' 
-import Button from '../button/button.js';
 import { replace } from '../../logic/utils.js';
 
 function HeaderCell({cellData, cellTextInput}) {
