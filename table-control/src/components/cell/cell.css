@@ -18,3 +18,11 @@
 .error {
     background-color: orange;
 }
+
+.and {
+    background-color: coral;
+}
+
+.or {
+    background-color: cornflowerblue;
+}

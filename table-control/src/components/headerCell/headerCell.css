@@ -8,6 +8,10 @@
     text-align: center;
 }
 
+th.align-left div{
+    text-align: left;
+}
+
 .narrow {
     min-width: 25px;
     max-width: 35px;
@@ -16,6 +20,11 @@
 th.narrow {
     min-width: 25px;
     max-width: 35px;
+}
+
+th.narrow-medium {
+    min-width: 40px;
+    text-align: center;
 }
 
 .vertical {

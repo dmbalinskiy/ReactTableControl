@@ -15,12 +15,13 @@ function getVerticalManagerForTable1(){
         let value = new cellModifierValue();
         value.isHeader = true;
         value.classesToRemove.push('vertical');
+        value.classesToAdd.push('align-left');
         return [ new cellModifierSelectorAndValue(value)];
       } (), 
     );
 
   //for sensors - expandable
-  table1VertMgr.createAndAddRange(1, 12, false, false, 1,
+  table1VertMgr.createAndAddRange(1, 20, false, false, 1,
     function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
@@ -144,6 +145,7 @@ function getVerticalManagerForTable2(){
       let value = new cellModifierValue();
       value.isHeader = true;
       value.classesToRemove.push('vertical');
+      value.classesToAdd.push('align-left');
       return [ new cellModifierSelectorAndValue(value)];
     } ());
 
@@ -156,15 +158,15 @@ function getVerticalManagerForTable2(){
     } ()); 
 
   //for logic operation type - fixed
-  table2VertMgr.createAndAddRange(1, 1, true, true, -1,
+  table2VertMgr.createAndAddRange(1, 1, true, false, 2,
     function () {
       let value = new cellModifierValue();
-        value.classesToAdd.push('narrow');
+        value.classesToAdd.push('narrow-medium');
         return [ new cellModifierSelectorAndValue(value)];
     } ()); 
 
     //for sensors - expandable
-  table2VertMgr.createAndAddRange(1, 12, false, false, -1,
+  table2VertMgr.createAndAddRange(1, 15, false, false, 1,
     function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');
@@ -172,7 +174,7 @@ function getVerticalManagerForTable2(){
     } ()); 
   
     //for commands - expandable
-  table2VertMgr.createAndAddRange(1, 8, false, false, -1,
+  table2VertMgr.createAndAddRange(1, 8, false, false, 1,
     function () {
       let value = new cellModifierValue();
         value.classesToAdd.push('narrow');

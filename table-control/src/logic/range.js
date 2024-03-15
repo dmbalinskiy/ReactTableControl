@@ -117,10 +117,17 @@ export class range {
 
 
     handleClick(cellData){
-        if(this.#cellClickHandlerIndex !== 1)
+        if(this.#cellClickHandlerIndex !== 1 && this.#cellClickHandlerIndex !== 2)
             return false;
 
-        this.cellDataClickHandler(cellData);
+        if(this.#cellClickHandlerIndex === 1){
+            console.log('handle click... 11' )
+            this.cellDataClickHandlerDigits(cellData);
+        }
+        else if(this.#cellClickHandlerIndex === 2){
+            console.log('handle click...')
+            this.cellDataClickHandlerLogic(cellData);
+        }
         return true;
     }
 
@@ -134,7 +141,7 @@ export class range {
         --this.#currentRangeEndIdx;
     }
 
-    cellDataClickHandler (cellData) {
+    cellDataClickHandlerDigits (cellData) {
 
         cellData.classes = removeIfContains('ok', cellData.classes); 
         cellData.classes = removeIfContains('warning', cellData.classes); 
@@ -156,6 +163,23 @@ export class range {
           cellData.text = '';
         }
       }
+
+      cellDataClickHandlerLogic(cellData){
+        cellData.classes = removeIfContains('or', cellData.classes); 
+        cellData.classes = removeIfContains('and', cellData.classes); 
+
+        if(cellData.text === 'AND'){
+            cellData.text = 'OR';
+            cellData.classes = addIfNotContains('or', cellData.classes);
+        }
+        else if(cellData.text === 'OR'){
+            cellData.text = '';
+        }
+        else {
+            cellData.text = 'AND';
+            cellData.classes = addIfNotContains('and', cellData.classes);
+        }
+    }
 }
 
 export default range;
